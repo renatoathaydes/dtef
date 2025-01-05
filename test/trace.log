@@ -1,0 +1,61 @@
+------------------
+	    4	_D4main5sleepFNbNilZv
+_D4core4time__T3durVAyaa5_6d73656373ZQwFNaNbNiNflZSQBxQBv8Duration	4	2891	2544
+	    4	_D4core4time__T7convertVAyaa5_6d73656373VQra6_686e73656373ZQBsFNaNbNiNflZl
+------------------
+	    4	_D4core4time__T3durVAyaa5_6d73656373ZQwFNaNbNiNflZSQBxQBv8Duration
+_D4core4time__T7convertVAyaa5_6d73656373VQra6_686e73656373ZQBsFNaNbNiNflZl	4	347	347
+------------------
+_D4core8internal5array8equality__T8__equalsTaTaZQoFNaNbNiNeMxAaMxQeZb	0	315	315
+------------------
+	    2	_D4main5fast2FNbNiZv
+	    1	_D4main__T8fastSlowZQkFNbNiZv
+_D4main4fastFNbNiZv	3	38251798	1631
+	    3	_D4main5sleepFNbNilZv
+------------------
+	    1	_D4main__T8fastSlowZQkFNbNiZv
+_D4main4slowFNbNiZv	1	114157000	524
+	    1	_D4main5sleepFNbNilZv
+------------------
+	    1	_Dmain
+_D4main5fast2FNbNiZv	1	25983616	1874
+	    2	_D4main4fastFNbNiZv
+------------------
+	    3	_D4main4fastFNbNiZv
+	    1	_D4main4slowFNbNiZv
+_D4main5sleepFNbNilZv	4	152406643	152403752
+	    4	_D4core4time__T3durVAyaa5_6d73656373ZQwFNaNbNiNflZSQBxQBv8Duration
+------------------
+	    1	_Dmain
+_D4main7nothingFNbNiZv	1	568	436
+	    2	_D4main9doNothingFNbNiZv
+------------------
+	    2	_D4main7nothingFNbNiZv
+_D4main9doNothingFNbNiZv	2	132	132
+------------------
+	    1	_Dmain
+_D4main__T8fastSlowZQkFNbNiZv	1	126428865	1809
+	    1	_D4main4fastFNbNiZv
+	    1	_D4main4slowFNbNiZv
+------------------
+_Dmain	0	152415759	2710
+	    1	_D4main5fast2FNbNiZv
+	    1	_D4main__T8fastSlowZQkFNbNiZv
+	    1	_D4main7nothingFNbNiZv
+
+======== Timer frequency unknown, Times are in Megaticks ========
+
+  Num          Tree        Func        Per
+  Calls        Time        Time        Call
+
+      4         152         152          38     nothrow @nogc void main.sleep(long)
+      1         152           0           0     _Dmain
+      4           0           0           0     pure nothrow @nogc @safe core.time.Duration core.time.dur!("msecs").dur(long)
+      1          25           0           0     nothrow @nogc void main.fast2()
+      1         126           0           0     nothrow @nogc void main.fastSlow!().fastSlow()
+      3          38           0           0     nothrow @nogc void main.fast()
+      1         114           0           0     nothrow @nogc void main.slow()
+      1           0           0           0     nothrow @nogc void main.nothing()
+      4           0           0           0     pure nothrow @nogc @safe long core.time.convert!("msecs", "hnsecs").convert(long)
+      1           0           0           0     pure nothrow @nogc @trusted bool core.internal.array.equality.__equals!(char, char).__equals(scope const(char[]), scope const(char[]))
+      2           0           0           0     nothrow @nogc void main.doNothing()
