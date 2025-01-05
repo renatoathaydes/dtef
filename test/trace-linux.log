@@ -1,0 +1,287 @@
+------------------
+%ÁX	0	0	0
+------------------
+	 3675	_D3std9algorithm9iteration__T12FilterResultS8dencoder4mainFNeAAyaZ10__lambda14TAxaZQCc5primeMFNaNfZv
+	64317	_D3std9algorithm9iteration__T12FilterResultS8dencoder4mainFNeAAyaZ10__lambda14TAxaZQCc5frontMFNaNdNfZw
+	73539	_D3std9algorithm9iteration__T12FilterResultS8dencoder4mainFNeAAyaZ10__lambda14TAxaZQCc8popFrontMFNaNfZv
+_D3std3utf__T6decodeVEQu8typecons__T4FlagVAyaa19_7573655265706c6163656d656e744463686172ZQCai0TAxaZQDhFNaNeMKQoKmZw	141531	745870	745870
+------------------
+	    2	_D3std5stdio4File__T5writeTiTaZQlMFNfiaZv
+_D3std4conv__T11toTextRangeTiTSQBd5stdio4File17LockingTextWriterZQBzFNfiQBqZv	2	20429	1941
+	    2	_D4core8internal6string__T20unsignedToTempStringVki10Vbi0TaZQBiFNaNbNiNfmNkMAaZQd
+	    2	_D3std5stdio4File17LockingTextWriter__T3putTAaZQiMFNfMQkZv
+------------------
+	    2	_D3std5stdio4File__T5writeTiTaZQlMFNfiaZv
+_D3std5range10primitives__T3putTSQBf5stdio4File17LockingTextWriterTaZQBqFNfKQBsaZv	2	37179	37179
+------------------
+	76539	_D3std9algorithm9iteration__T12FilterResultS8dencoder4mainFNeAAyaZ10__lambda14TAxaZQCc8popFrontMFNaNfZv
+	  675	_D3std9algorithm9iteration__T12FilterResultS8dencoder4mainFNeAAyaZ10__lambda14TAxaZQCc5primeMFNaNfZv
+_D3std5range10primitives__T8popFrontTaZQmFNaNbNiNeMKANgaZv	77214	294182	294182
+------------------
+	    2	_D3std4conv__T11toTextRangeTiTSQBd5stdio4File17LockingTextWriterZQBzFNfiQBqZv
+_D3std5stdio4File17LockingTextWriter__T3putTAaZQiMFNfMQkZv	2	18319	18319
+------------------
+	    6	_D4core8internal8lifetime__T10emplaceRefTS3std5stdio4File__T10ByLineImplTaTaZQr4ImplTQBsTSQBwQBvQBsTEQCh8typecons__T4FlagVAyaa14_6b6565705465726d696e61746f72ZQBqTaZQFgFKQEyKQDgKQCzKaZ1S__T6__ctorZQiMFNcNfKQEmKQEfKaZSQIgQIeQHy__TQHsTQHjTQHnTQFvTQFoTaZQIoFKQIgKQGoKQGhKaZQDi
+_D3std5stdio4File__T10ByLineImplTaTaZQr4Impl6__ctorMFNcNfSQCeQCdQCaEQCo8typecons__T4FlagVAyaa14_6b6565705465726d696e61746f72ZQBqaZSQEzQEyQEv__TQEtTaTaZQFbQEl	6	2152	2152
+------------------
+	359310	_D8dencoder14loadDictionaryFNeAyaZHSQBi3KeyAAxa
+	 9003	_Dmain
+_D3std5stdio4File__T10ByLineImplTaTaZQr4Impl8needLineMFNfZv	368313	43966578	17105204
+	122775	_D3std5stdio4File__T6readlnTaZQkMFNfKAawZm
+	122769	_D3std9algorithm9searching__T8endsWithVAyaa6_61203d3d2062TAaTaZQBiFNaNbNiNfQraZb
+------------------
+	    6	_D3std5stdio4File__T6byLineTaTaZQmMFEQBj8typecons__T4FlagVAyaa14_6b6565705465726d696e61746f72ZQBqaZSQDuQDtQDq__T10ByLineImplTaTaZQr
+_D3std5stdio4File__T10ByLineImplTaTaZQr6__ctorMFNcSQBxQBwQBtEQCh8typecons__T4FlagVAyaa14_6b6565705465726d696e61746f72ZQBqaZSQEsQErQEo__TQEmTaTaZQEu	6	19392	3278
+	    6	_D3std8typecons__T10RefCountedTSQBe5stdio4File__T10ByLineImplTaTaZQr4ImplVEQCvQCu24RefCountedAutoInitializei0ZQDo__T6__ctorTSQEtQDpQDmTEQFeQFd__T4FlagVAyaa14_6b6565705465726d696e61746f72ZQBqTaZQCzMFNcKQCzKQCsKaZSQIcQIb__TQHvTQHmVQFzi0ZQIj
+------------------
+	    2	_D3std5stdio__T7writelnTiZQlFNfiZv
+_D3std5stdio4File__T5writeTiTaZQlMFNfiaZv	2	62428	4820
+	    2	_D3std9exception__T7enforceZ__TQmTbZQrFNaNfbLAxaAyamZb
+	    2	_D3std4conv__T11toTextRangeTiTSQBd5stdio4File17LockingTextWriterZQBzFNfiQBqZv
+	    2	_D3std5range10primitives__T3putTSQBf5stdio4File17LockingTextWriterTaZQBqFNfKQBsaZv
+------------------
+	    3	_D8dencoder14loadDictionaryFNeAyaZHSQBi3KeyAAxa
+	    3	_Dmain
+_D3std5stdio4File__T6byLineTaTaZQmMFEQBj8typecons__T4FlagVAyaa14_6b6565705465726d696e61746f72ZQBqaZSQDuQDtQDq__T10ByLineImplTaTaZQr	6	22048	2656
+	    6	_D3std5stdio4File__T10ByLineImplTaTaZQr6__ctorMFNcSQBxQBwQBtEQCh8typecons__T4FlagVAyaa14_6b6565705465726d696e61746f72ZQBqaZSQEsQErQEo__TQEmTaTaZQEu
+------------------
+	122775	_D3std5stdio4File__T10ByLineImplTaTaZQr4Impl8needLineMFNfZv
+_D3std5stdio4File__T6readlnTaZQkMFNfKAawZm	122775	26403918	25790537
+	122775	_D3std9exception__T7enforceZ__TQmTbZQrFNaNfbLAxaAyamZb
+------------------
+	    2	_D8dencoder7Counter5flushMFZv
+_D3std5stdio__T7writelnTiZQlFNfiZv	2	64563	2135
+	    2	_D3std5stdio4File__T5writeTiTaZQlMFNfiaZv
+------------------
+	    6	_D3std8typecons__T10RefCountedTSQBe5stdio4File__T10ByLineImplTaTaZQr4ImplVEQCvQCu24RefCountedAutoInitializei0ZQDo__T6__ctorTSQEtQDpQDmTEQFeQFd__T4FlagVAyaa14_6b6565705465726d696e61746f72ZQBqTaZQCzMFNcKQCzKQCsKaZSQIcQIb__TQHvTQHmVQFzi0ZQIj
+_D3std8typecons__T10RefCountedTSQBe5stdio4File__T10ByLineImplTaTaZQr4ImplVEQCvQCu24RefCountedAutoInitializei0ZQDo15RefCountedStore__T10initializeTSQFpQElQEiTEQGaQFz__T4FlagVAyaa14_6b6565705465726d696e61746f72ZQBqTaZQDeMFKQCxKQCqKaZv	6	14924	8562
+	    6	_D4core8internal8lifetime__T10emplaceRefTS3std5stdio4File__T10ByLineImplTaTaZQr4ImplTQBsTSQBwQBvQBsTEQCh8typecons__T4FlagVAyaa14_6b6565705465726d696e61746f72ZQBqTaZQFgFNfKQFaKQDiKQDbKaZv
+------------------
+	    3	_D8dencoder14loadDictionaryFNeAyaZHSQBi3KeyAAxa
+	    3	_Dmain
+_D3std8typecons__T10RefCountedTSQBe5stdio4File__T10ByLineImplTaTaZQr4ImplVEQCvQCu24RefCountedAutoInitializei0ZQDo6__dtorMFZv	6	9044	9044
+------------------
+	    6	_D3std5stdio4File__T10ByLineImplTaTaZQr6__ctorMFNcSQBxQBwQBtEQCh8typecons__T4FlagVAyaa14_6b6565705465726d696e61746f72ZQBqaZSQEsQErQEo__TQEmTaTaZQEu
+_D3std8typecons__T10RefCountedTSQBe5stdio4File__T10ByLineImplTaTaZQr4ImplVEQCvQCu24RefCountedAutoInitializei0ZQDo__T6__ctorTSQEtQDpQDmTEQFeQFd__T4FlagVAyaa14_6b6565705465726d696e61746f72ZQBqTaZQCzMFNcKQCzKQCsKaZSQIcQIb__TQHvTQHmVQFzi0ZQIj	6	16114	1190
+	    6	_D3std8typecons__T10RefCountedTSQBe5stdio4File__T10ByLineImplTaTaZQr4ImplVEQCvQCu24RefCountedAutoInitializei0ZQDo15RefCountedStore__T10initializeTSQFpQElQEiTEQGaQFz__T4FlagVAyaa14_6b6565705465726d696e61746f72ZQBqTaZQDeMFKQCxKQCqKaZv
+------------------
+	64317	_D3std9algorithm9iteration__T4eachS8dencoder4mainFNeAAyaZ10__lambda15Z__TQBsTSQCyQCxQCq__T12FilterResultSQCsQCmFNeQCkZ10__lambda14TAxaZQBtZQEgMFNaNfQCtZEQFv8typecons__T4FlagVQEra4_65616368ZQv
+_D3std9algorithm9iteration__T12FilterResultS8dencoder4mainFNeAAyaZ10__lambda14TAxaZQCc5frontMFNaNdNfZw	64317	10297008	9632562
+	128634	_D3std9algorithm9iteration__T12FilterResultS8dencoder4mainFNeAAyaZ10__lambda14TAxaZQCc5primeMFNaNfZv
+	64317	_D3std3utf__T6decodeVEQu8typecons__T4FlagVAyaa19_7573655265706c6163656d656e744463686172ZQCai0TAxaZQDhFNaNeMKQoKmZw
+------------------
+	67317	_D3std9algorithm9iteration__T4eachS8dencoder4mainFNeAAyaZ10__lambda15Z__TQBsTSQCyQCxQCq__T12FilterResultSQCsQCmFNeQCkZ10__lambda14TAxaZQBtZQEgMFNaNfQCtZEQFv8typecons__T4FlagVQEra4_65616368ZQv
+	128634	_D3std9algorithm9iteration__T12FilterResultS8dencoder4mainFNeAAyaZ10__lambda14TAxaZQCc5frontMFNaNdNfZw
+	64317	_D3std9algorithm9iteration__T12FilterResultS8dencoder4mainFNeAAyaZ10__lambda14TAxaZQCc8popFrontMFNaNfZv
+_D3std9algorithm9iteration__T12FilterResultS8dencoder4mainFNeAAyaZ10__lambda14TAxaZQCc5primeMFNaNfZv	260268	1037123	971282
+	 3675	_D3std3utf__T6decodeVEQu8typecons__T4FlagVAyaa19_7573655265706c6163656d656e744463686172ZQCai0TAxaZQDhFNaNeMKQoKmZw
+	  675	_D3std5range10primitives__T8popFrontTaZQmFNaNbNiNeMKANgaZv
+------------------
+	64317	_D3std9algorithm9iteration__T4eachS8dencoder4mainFNeAAyaZ10__lambda15Z__TQBsTSQCyQCxQCq__T12FilterResultSQCsQCmFNeQCkZ10__lambda14TAxaZQBtZQEgMFNaNfQCtZEQFv8typecons__T4FlagVQEra4_65616368ZQv
+_D3std9algorithm9iteration__T12FilterResultS8dencoder4mainFNeAAyaZ10__lambda14TAxaZQCc8popFrontMFNaNfZv	64317	11191851	10514384
+	64317	_D3std9algorithm9iteration__T12FilterResultS8dencoder4mainFNeAAyaZ10__lambda14TAxaZQCc5primeMFNaNfZv
+	76539	_D3std5range10primitives__T8popFrontTaZQmFNaNbNiNeMKANgaZv
+	73539	_D3std3utf__T6decodeVEQu8typecons__T4FlagVAyaa19_7573655265706c6163656d656e744463686172ZQCai0TAxaZQDhFNaNeMKQoKmZw
+------------------
+	 3000	_Dmain
+_D3std9algorithm9iteration__T4eachS8dencoder4mainFNeAAyaZ10__lambda15Z__TQBsTSQCyQCxQCq__T12FilterResultSQCsQCmFNeQCkZ10__lambda14TAxaZQBtZQEgMFNaNfQCtZEQFv8typecons__T4FlagVQEra4_65616368ZQv	3000	50405007	28246727
+	67317	_D3std9algorithm9iteration__T12FilterResultS8dencoder4mainFNeAAyaZ10__lambda14TAxaZQCc5primeMFNaNfZv
+	64317	_D3std9algorithm9iteration__T12FilterResultS8dencoder4mainFNeAAyaZ10__lambda14TAxaZQCc5frontMFNaNdNfZw
+	64317	_D3std9algorithm9iteration__T12FilterResultS8dencoder4mainFNeAAyaZ10__lambda14TAxaZQCc8popFrontMFNaNfZv
+------------------
+	 3000	_Dmain
+_D3std9algorithm9iteration__T6filterS8dencoder4mainFNeAAyaZ10__lambda14Z__TQBuTAxaZQCcMFNaNbNiNfQrZSQDuQDtQDm__T12FilterResultSQDmQDgFNeQDeZQDdTQCnZQBk	3000	21836	21836
+------------------
+	122769	_D3std5stdio4File__T10ByLineImplTaTaZQr4Impl8needLineMFNfZv
+_D3std9algorithm9searching__T8endsWithVAyaa6_61203d3d2062TAaTaZQBiFNaNbNiNfQraZb	122769	457456	457456
+------------------
+	122775	_D3std5stdio4File__T6readlnTaZQkMFNfKAawZm
+	    2	_D3std5stdio4File__T5writeTiTaZQlMFNfiaZv
+_D3std9exception__T7enforceZ__TQmTbZQrFNaNfbLAxaAyamZb	122777	613381	613381
+------------------
+	119769	_D8dencoder14loadDictionaryFNeAyaZHSQBi3KeyAAxa
+_D4core8internal5array11duplication__T4_dupTaTyaZQlFNaNbNeMAaZAya	119769	59618336	59618336
+------------------
+	119769	_D8dencoder12wordToNumberFNaNbAxaZSQBh3Key
+_D4core8internal5array12construction__T12_d_newarrayTThZQrFNaNbNiNembZAh	119769	32610062	18617552
+	119769	_D4core8internal5array5utils__T12__arrayAllocThZQrFNaNbNemZSQCg6memory8BlkInfo_
+	119769	_D4core8internal5array5utils__T21__setArrayAllocLengthThZQBaFNaNbNiKSQCp6memory8BlkInfo_mbmZb
+------------------
+	119769	_D4core8internal5array12construction__T12_d_newarrayTThZQrFNaNbNiNembZAh
+_D4core8internal5array5utils__T12__arrayAllocThZQrFNaNbNemZSQCg6memory8BlkInfo_	119769	13432714	13432714
+------------------
+	119769	_D4core8internal5array12construction__T12_d_newarrayTThZQrFNaNbNiNembZAh
+_D4core8internal5array5utils__T21__setArrayAllocLengthThZQBaFNaNbNiKSQCp6memory8BlkInfo_mbmZb	119769	559796	559796
+------------------
+_D4core8internal5array8equality__T8__equalsTaTaZQoFNaNbNiNeMxAaMxQeZb	0	1572	1572
+------------------
+	205126146	_D8dencoder3Key8opEqualsMxFNaNbNfxSQBhQBbZb
+	205126146	1452050606	1452050606
+------------------
+ªÄX	0	0	0
+------------------
+	119769	_D8dencoder14loadDictionaryFNeAyaZHSQBi3KeyAAxa
+_D4core8internal5array9appending__T17_d_arrayappendcTXHTAAxaTQeZQBdFNaNbNcNeMNkKQymZQBc	119769	55346448	55346448
+------------------
+	    2	_D3std4conv__T11toTextRangeTiTSQBd5stdio4File17LockingTextWriterZQBzFNfiQBqZv
+_D4core8internal6string__T20unsignedToTempStringVki10Vbi0TaZQBiFNaNbNiNfmNkMAaZQd	2	169	169
+------------------
+	    5	_D4core8internal7switch___T8__switchTyaVxAyaa5_636f756e74VxQsa5_7072696e74ZQBwFNaNbNiNfMxQBwZi
+_D4core8internal6string__T7dstrcmpZQjFNaNbNiNeMxAaMxQeZi	5	1580	1580
+------------------
+	    3	_D8dencoder21createSolutionHandlerFAyaZCQBm16ISolutionHandler
+_D4core8internal7switch___T8__switchTyaVxAyaa5_636f756e74VxQsa5_7072696e74ZQBwFNaNbNiNfMxQBwZi	3	1431	865
+	    5	_D4core8internal6string__T7dstrcmpZQjFNaNbNiNeMxAaMxQeZi
+------------------
+	    6	_D4core8internal8lifetime__T10emplaceRefTS3std5stdio4File__T10ByLineImplTaTaZQr4ImplTQBsTSQBwQBvQBsTEQCh8typecons__T4FlagVAyaa14_6b6565705465726d696e61746f72ZQBqTaZQFgFNfKQFaKQDiKQDbKaZv
+_D4core8internal8lifetime__T10emplaceRefTS3std5stdio4File__T10ByLineImplTaTaZQr4ImplTQBsTSQBwQBvQBsTEQCh8typecons__T4FlagVAyaa14_6b6565705465726d696e61746f72ZQBqTaZQFgFKQEyKQDgKQCzKaZ1S__T6__ctorZQiMFNcNfKQEmKQEfKaZSQIgQIeQHy__TQHsTQHjTQHnTQFvTQFoTaZQIoFKQIgKQGoKQGhKaZQDi	6	4206	2054
+	    6	_D3std5stdio4File__T10ByLineImplTaTaZQr4Impl6__ctorMFNcNfSQCeQCdQCaEQCo8typecons__T4FlagVAyaa14_6b6565705465726d696e61746f72ZQBqaZSQEzQEyQEv__TQEtTaTaZQFbQEl
+------------------
+	    6	_D3std8typecons__T10RefCountedTSQBe5stdio4File__T10ByLineImplTaTaZQr4ImplVEQCvQCu24RefCountedAutoInitializei0ZQDo15RefCountedStore__T10initializeTSQFpQElQEiTEQGaQFz__T4FlagVAyaa14_6b6565705465726d696e61746f72ZQBqTaZQDeMFKQCxKQCqKaZv
+_D4core8internal8lifetime__T10emplaceRefTS3std5stdio4File__T10ByLineImplTaTaZQr4ImplTQBsTSQBwQBvQBsTEQCh8typecons__T4FlagVAyaa14_6b6565705465726d696e61746f72ZQBqTaZQFgFNfKQFaKQDiKQDbKaZv	6	6362	2156
+	    6	_D4core8internal8lifetime__T10emplaceRefTS3std5stdio4File__T10ByLineImplTaTaZQr4ImplTQBsTSQBwQBvQBsTEQCh8typecons__T4FlagVAyaa14_6b6565705465726d696e61746f72ZQBqTaZQFgFKQEyKQDgKQCzKaZ1S__T6__ctorZQiMFNcNfKQEmKQEfKaZSQIgQIeQHy__TQHsTQHjTQHnTQFvTQFoTaZQIoFKQIgKQGoKQGhKaZQDi
+------------------
+	    3	_D8dencoder14loadDictionaryFNeAyaZHSQBi3KeyAAxa
+_D4core8lifetime__T11_d_newitemTTS3std5stdio4FileZQBfFNaNbNeZPQBd	3	90221	90221
+------------------
+	    2	_D8dencoder21createSolutionHandlerFAyaZCQBm16ISolutionHandler
+_D4core8lifetime__T12_d_newclassTTC8dencoder7CounterZQBiFNaNbNeZQBe	2	17051	17051
+------------------
+	119769	_D8dencoder14loadDictionaryFNeAyaZHSQBi3KeyAAxa
+	    1	_D8dencoder21createSolutionHandlerFAyaZCQBm16ISolutionHandler
+	    0	%ÁX
+_D6object__T7requireTS8dencoder3KeyTAAxaZQBdFNaNcNfKHQBgQuQBlLQBaZQBe	119770	87414120	85726491
+	119769	_D8dencoder3Key6toHashMxFNaNbZm
+	118418	_D8dencoder14loadDictionaryFNeAyaZ12__dgliteral8MFNaNbNiNfZAAxa
+	 1986	_D8dencoder3Key11__xopEqualsMxFKxSQBgQBaZb
+------------------
+	119769	_D8dencoder14loadDictionaryFNeAyaZHSQBi3KeyAAxa
+_D8dencoder12wordToNumberFNaNbAxaZSQBh3Key	119769	150287216	106956801
+	119769	_D4core8internal5array12construction__T12_d_newarrayTThZQrFNaNbNiNembZAh
+	1282789	_D8dencoder13letterToDigitFNaNbNiNfaZh
+------------------
+	1282789	_D8dencoder12wordToNumberFNaNbAxaZSQBh3Key
+_D8dencoder13letterToDigitFNaNbNiNfaZh	1282789	10720353	10720353
+------------------
+	118418	_D6object__T7requireTS8dencoder3KeyTAAxaZQBdFNaNcNfKHQBgQuQBlLQBaZQBe
+_D8dencoder14loadDictionaryFNeAyaZ12__dgliteral8MFNaNbNiNfZAAxa	118418	556520	556520
+------------------
+	    3	_Dmain
+_D8dencoder14loadDictionaryFNeAyaZHSQBi3KeyAAxa	3	457980765	64623877
+	    3	_D4core8lifetime__T11_d_newitemTTS3std5stdio4FileZQBfFNaNbNeZPQBd
+	    3	_D3std5stdio4File__T6byLineTaTaZQmMFEQBj8typecons__T4FlagVAyaa14_6b6565705465726d696e61746f72ZQBqaZSQDuQDtQDq__T10ByLineImplTaTaZQr
+	359310	_D3std5stdio4File__T10ByLineImplTaTaZQr4Impl8needLineMFNfZv
+	119769	_D4core8internal5array11duplication__T4_dupTaTyaZQlFNaNbNeMAaZAya
+	119769	_D8dencoder12wordToNumberFNaNbAxaZSQBh3Key
+	119769	_D6object__T7requireTS8dencoder3KeyTAAxaZQBdFNaNcNfKHQBgQuQBlLQBaZQBe
+	119769	_D4core8internal5array9appending__T17_d_arrayappendcTXHTAAxaTQeZQBdFNaNbNcNeMNkKQymZQBc
+	    3	_D3std8typecons__T10RefCountedTSQBe5stdio4File__T10ByLineImplTaTaZQr4ImplVEQCvQCu24RefCountedAutoInitializei0ZQDo6__dtorMFZv
+------------------
+	67325289	_D8dencoder17printTranslationsFNiIHSQBi3KeyAAaCQBt16ISolutionHandlerAxaQdKSQCv5WordsZv
+_D8dencoder15lastItemIsDigitFNaNbNiAAxaZb	67325289	256092309	256092309
+------------------
+	 3000	_Dmain
+	371697117	_D8dencoder17printTranslationsFNiIHSQBi3KeyAAaCQBt16ISolutionHandlerAxaQdKSQCv5WordsZv
+_D8dencoder17printTranslationsFNiIHSQBi3KeyAAaCQBt16ISolutionHandlerAxaQdKSQCv5WordsZv	371700117	261904238109	226552267695
+	862744456	_D8dencoder3Key6toHashMxFNaNbZm
+	410243028	_D8dencoder3Key11__xopEqualsMxFKxSQBgQBaZb
+	371697117	_D8dencoder17printTranslationsFNiIHSQBi3KeyAAaCQBt16ISolutionHandlerAxaQdKSQCv5WordsZv
+	67325289	_D8dencoder15lastItemIsDigitFNaNbNiAAxaZb
+	117353084	_D8dencoder7Counter3putMFNiAxaISQBe5WordsZv
+------------------
+	    3	_Dmain
+_D8dencoder21createSolutionHandlerFAyaZCQBm16ISolutionHandler	3	28193	2263
+	    3	_D4core8internal7switch___T8__switchTyaVxAyaa5_636f756e74VxQsa5_7072696e74ZQBwFNaNbNiNfMxQBwZi
+	    2	_D4core8lifetime__T12_d_newclassTTC8dencoder7CounterZQBiFNaNbNeZQBe
+------------------
+	 1986	_D6object__T7requireTS8dencoder3KeyTAAxaZQBdFNaNcNfKHQBgQuQBlLQBaZQBe
+	410243028	_D8dencoder17printTranslationsFNiIHSQBi3KeyAAaCQBt16ISolutionHandlerAxaQdKSQCv5WordsZv
+_D8dencoder3Key11__xopEqualsMxFKxSQBgQBaZb	410245014	33402551694	16223571638
+	410245014	_D8dencoder3Key8opEqualsMxFNaNbNfxSQBhQBbZb
+------------------
+	119769	_D6object__T7requireTS8dencoder3KeyTAAxaZQBdFNaNcNfKHQBgQuQBlLQBaZQBe
+	862744456	_D8dencoder17printTranslationsFNiIHSQBi3KeyAAaCQBt16ISolutionHandlerAxaQdKSQCv5WordsZv
+_D8dencoder3Key6toHashMxFNaNbZm	862864225	1481196540	1481196540
+------------------
+	410245014	_D8dencoder3Key11__xopEqualsMxFKxSQBgQBaZb
+_D8dencoder3Key8opEqualsMxFNaNbNfxSQBhQBbZb	410245014	17178980056	15726929450
+	205126146	ªÄX
+------------------
+	117353084	_D8dencoder17printTranslationsFNiIHSQBi3KeyAAaCQBt16ISolutionHandlerAxaQdKSQCv5WordsZv
+_D8dencoder7Counter3putMFNiAxaISQBe5WordsZv	117353084	210347030	210347030
+------------------
+	    2	_Dmain
+_D8dencoder7Counter5flushMFZv	2	64712	149
+	    2	_D3std5stdio__T7writelnTiZQlFNfiZv
+------------------
+	    1	_Dmain
+	  262	_D8dencoder17printTranslationsFNiIHSQBi3KeyAAaCQBt16ISolutionHandlerAxaQdKSQCv5WordsZv
+	    0	%ÁX
+_Dmain	263	262418239734	2103989
+	    3	_D8dencoder21createSolutionHandlerFAyaZCQBm16ISolutionHandler
+	    3	_D8dencoder14loadDictionaryFNeAyaZHSQBi3KeyAAxa
+	    3	_D3std5stdio4File__T6byLineTaTaZQmMFEQBj8typecons__T4FlagVAyaa14_6b6565705465726d696e61746f72ZQBqaZSQDuQDtQDq__T10ByLineImplTaTaZQr
+	 9003	_D3std5stdio4File__T10ByLineImplTaTaZQr4Impl8needLineMFNfZv
+	 3000	_D3std9algorithm9iteration__T6filterS8dencoder4mainFNeAAyaZ10__lambda14Z__TQBuTAxaZQCcMFNaNbNiNfQrZSQDuQDtQDm__T12FilterResultSQDmQDgFNeQDeZQDdTQCnZQBk
+	 3000	_D3std9algorithm9iteration__T4eachS8dencoder4mainFNeAAyaZ10__lambda15Z__TQBsTSQCyQCxQCq__T12FilterResultSQCsQCmFNeQCkZ10__lambda14TAxaZQBtZQEgMFNaNfQCtZEQFv8typecons__T4FlagVQEra4_65616368ZQv
+	 3000	_D8dencoder17printTranslationsFNiIHSQBi3KeyAAaCQBt16ISolutionHandlerAxaQdKSQCv5WordsZv
+	    3	_D3std8typecons__T10RefCountedTSQBe5stdio4File__T10ByLineImplTaTaZQr4ImplVEQCvQCu24RefCountedAutoInitializei0ZQDo6__dtorMFZv
+	    2	_D8dencoder7Counter5flushMFZv
+
+======== Timer frequency unknown, Times are in Megaticks ========
+
+  Num          Tree        Func        Per
+  Calls        Time        Time        Call
+
+371700117      261904      226552           0     @nogc void dencoder.printTranslations(in char[][][dencoder.Key], dencoder.ISolutionHandler, const(char)[], const(char)[], ref dencoder.Words)
+410245014       33402       16223           0     const bool dencoder.Key.__xopEquals(ref const(dencoder.Key))
+410245014       17178       15726           0     const pure nothrow @safe bool dencoder.Key.opEquals(const(dencoder.Key))
+862864225        1481        1481           0     const pure nothrow ulong dencoder.Key.toHash()
+205126146        1452        1452           0     
+67325289         256         256           0     pure nothrow @nogc bool dencoder.lastItemIsDigit(const(char)[][])
+117353084         210         210           0     @nogc void dencoder.Counter.put(const(char)[], in dencoder.Words)
+ 119769         150         106           0     pure nothrow dencoder.Key dencoder.wordToNumber(const(char)[])
+ 119770          87          85           0     pure ref @safe const(char)[][] object.require!(dencoder.Key, const(char)[][]).require(ref const(char)[][][dencoder.Key], dencoder.Key, lazy const(char)[][])
+      3         457          64          21     @trusted const(char)[][][dencoder.Key] dencoder.loadDictionary(immutable(char)[])
+ 119769          59          59           0     pure nothrow @trusted immutable(char)[] core.internal.array.duplication._dup!(char, immutable(char))._dup(scope char[])
+ 119769          55          55           0     pure nothrow ref @trusted const(char)[][] core.internal.array.appending._d_arrayappendcTX!(const(char)[][], const(char)[])._d_arrayappendcTX(scope return ref const(char)[][], ulong)
+   3000          50          28           0     pure @safe std.typecons.Flag!("each").Flag std.algorithm.iteration.each!(dencoder.main(immutable(char)[][]).__lambda15).each!(std.algorithm.iteration.FilterResult!(dencoder.main(immutable(char)[][]).__lambda14, const(char)[]).FilterResult).each(std.algorithm.iteration.FilterResult!(dencoder.main(immutable(char)[][]).__lambda14, const(char)[]).FilterResult)
+ 122775          26          25           0     @safe ulong std.stdio.File.readln!(char).readln(ref char[], dchar)
+ 119769          32          18           0     pure nothrow @nogc @trusted ubyte[] core.internal.array.construction._d_newarrayT!(ubyte)._d_newarrayT(ulong, bool)
+ 368313          43          17           0     @safe void std.stdio.File.ByLineImpl!(char, char).ByLineImpl.Impl.needLine()
+ 119769          13          13           0     pure nothrow @trusted core.memory.BlkInfo_ core.internal.array.utils.__arrayAlloc!(ubyte).__arrayAlloc(ulong)
+1282789          10          10           0     pure nothrow @nogc @safe ubyte dencoder.letterToDigit(char)
+  64317          11          10           0     pure @safe void std.algorithm.iteration.FilterResult!(dencoder.main(immutable(char)[][]).__lambda14, const(char)[]).FilterResult.popFront()
+  64317          10           9           0     pure @property @safe dchar std.algorithm.iteration.FilterResult!(dencoder.main(immutable(char)[][]).__lambda14, const(char)[]).FilterResult.front()
+    263      262418           2           0     _Dmain
+ 260268           1           0           0     pure @safe void std.algorithm.iteration.FilterResult!(dencoder.main(immutable(char)[][]).__lambda14, const(char)[]).FilterResult.prime()
+ 141531           0           0           0     pure @trusted dchar std.utf.decode!(0, const(char)[]).decode(scope ref const(char)[], ref ulong)
+ 122777           0           0           0     pure @safe bool std.exception.enforce!().enforce!(bool).enforce(bool, lazy const(char)[], immutable(char)[], ulong)
+ 119769           0           0           0     pure nothrow @nogc bool core.internal.array.utils.__setArrayAllocLength!(ubyte).__setArrayAllocLength(ref core.memory.BlkInfo_, ulong, bool, ulong)
+ 118418           0           0           0     pure nothrow @nogc @safe const(char)[][] dencoder.loadDictionary(immutable(char)[]).__dgliteral8()
+ 122769           0           0           0     pure nothrow @nogc @safe bool std.algorithm.searching.endsWith!("a == b", char[], char).endsWith(char[], char)
+  77214           0           0           0     pure nothrow @nogc @trusted void std.range.primitives.popFront!(char).popFront(scope ref inout(char)[])
+      3           0           0           0     pure nothrow @trusted std.stdio.File* core.lifetime._d_newitemT!(std.stdio.File)._d_newitemT()
+      2           0           0           0     @safe void std.range.primitives.put!(std.stdio.File.LockingTextWriter, char).put(ref std.stdio.File.LockingTextWriter, char)
+   3000           0           0           0     pure nothrow @nogc @safe std.algorithm.iteration.FilterResult!(dencoder.main(immutable(char)[][]).__lambda14, const(char)[]).FilterResult std.algorithm.iteration.filter!(dencoder.main(immutable(char)[][]).__lambda14).filter!(const(char)[]).filter(const(char)[])
+      2           0           0           0     @safe void std.stdio.File.LockingTextWriter.put!(char[]).put(scope char[])
+      2           0           0           0     pure nothrow @trusted dencoder.Counter core.lifetime._d_newclassT!(dencoder.Counter)._d_newclassT()
+      6           0           0           0     void std.typecons.RefCounted!(std.stdio.File.ByLineImpl!(char, char).ByLineImpl.Impl, 0).RefCounted.__dtor()
+      6           0           0           0     void std.typecons.RefCounted!(std.stdio.File.ByLineImpl!(char, char).ByLineImpl.Impl, 0).RefCounted.RefCountedStore.initialize!(std.stdio.File, std.typecons.Flag!("keepTerminator").Flag, char).initialize(ref std.stdio.File, ref std.typecons.Flag!("keepTerminator").Flag, ref char)
+      2           0           0           0     @safe void std.stdio.File.write!(int, char).write(int, char)
+      6           0           0           0     ref std.stdio.File.ByLineImpl!(char, char).ByLineImpl std.stdio.File.ByLineImpl!(char, char).ByLineImpl.__ctor(std.stdio.File, std.typecons.Flag!("keepTerminator").Flag, char)
+      6           0           0           0     std.stdio.File.ByLineImpl!(char, char).ByLineImpl std.stdio.File.byLine!(char, char).byLine(std.typecons.Flag!("keepTerminator").Flag, char)
+      3           0           0           0     dencoder.ISolutionHandler dencoder.createSolutionHandler(immutable(char)[])
+      6           0           0           0     @safe void core.internal.lifetime.emplaceRef!(std.stdio.File.ByLineImpl!(char, char).ByLineImpl.Impl, std.stdio.File.ByLineImpl!(char, char).ByLineImpl.Impl, std.stdio.File, std.typecons.Flag!("keepTerminator").Flag, char).emplaceRef(ref std.stdio.File.ByLineImpl!(char, char).ByLineImpl.Impl, ref std.stdio.File, ref std.typecons.Flag!("keepTerminator").Flag, ref char)
+      6           0           0           0     ref @safe std.stdio.File.ByLineImpl!(char, char).ByLineImpl.Impl std.stdio.File.ByLineImpl!(char, char).ByLineImpl.Impl.__ctor(std.stdio.File, std.typecons.Flag!("keepTerminator").Flag, char)
+      2           0           0           0     @safe void std.stdio.writeln!(int).writeln(int)
+      6           0           0           0     ref @safe core.internal.lifetime.emplaceRef!(std.stdio.File.ByLineImpl!(char, char).ByLineImpl.Impl, std.stdio.File.ByLineImpl!(char, char).ByLineImpl.Impl, std.stdio.File, std.typecons.Flag!("keepTerminator").Flag, char).emplaceRef(ref std.stdio.File.ByLineImpl!(char, char).ByLineImpl.Impl, ref std.stdio.File, ref std.typecons.Flag!("keepTerminator").Flag, ref char).S core.internal.lifetime.emplaceRef!(std.stdio.File.ByLineImpl!(char, char).ByLineImpl.Impl, std.stdio.File.ByLineImpl!(char, char).ByLineImpl.Impl, std.stdio.File, std.typecons.Flag!("keepTerminator").Flag, char).emplaceRef(ref std.stdio.File.ByLineImpl!(char, char).ByLineImpl.Impl, ref std.stdio.File, ref std.typecons.Flag!("keepTerminator").Flag, ref char).S.__ctor!().__ctor(ref std.stdio.File, ref std.typecons.Flag!("keepTerminator").Flag, ref char)
+      2           0           0           0     @safe void std.conv.toTextRange!(int, std.stdio.File.LockingTextWriter).toTextRange(int, std.stdio.File.LockingTextWriter)
+      5           0           0           0     pure nothrow @nogc @trusted int core.internal.string.dstrcmp!().dstrcmp(scope const(char[]), scope const(char[]))
+      1           0           0           0     pure nothrow @nogc @trusted bool core.internal.array.equality.__equals!(char, char).__equals(scope const(char[]), scope const(char[]))
+      6           0           0           0     ref std.typecons.RefCounted!(std.stdio.File.ByLineImpl!(char, char).ByLineImpl.Impl, 0).RefCounted std.typecons.RefCounted!(std.stdio.File.ByLineImpl!(char, char).ByLineImpl.Impl, 0).RefCounted.__ctor!(std.stdio.File, std.typecons.Flag!("keepTerminator").Flag, char).__ctor(ref std.stdio.File, ref std.typecons.Flag!("keepTerminator").Flag, ref char)
+      3           0           0           0     pure nothrow @nogc @safe int core.internal.switch_.__switch!(immutable(char), "count", "print").__switch(scope const(immutable(char)[]))
+      2           0           0           0     pure nothrow @nogc @safe char[] core.internal.string.unsignedToTempString!(10u, false, char).unsignedToTempString(ulong, return scope char[])
+      2           0           0           0     void dencoder.Counter.flush()
+      1           0           0           0     %ÁX
+      1           0           0           0     ªÄX
