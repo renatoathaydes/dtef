@@ -69,8 +69,9 @@ struct LineData
         import std.typecons : Tuple;
 
         string[] calledBy;
-        string name;
         Tuple!(string, uint)[] calls;
+        string name;
+        long callCount;
         long time;
 
         this(ref return scope LineData lineData)
@@ -78,8 +79,12 @@ struct LineData
                 calledBy = lineData.calledBy.dup;
                 calls = lineData.calls.dup;
                 name = lineData.name;
+                callCount = lineData.callCount;
                 time = lineData.time;
         }
+
+        long timePerCall() => callCount == 0 || time == 0 ? 0 : time / callCount;
+
 }
 
 enum ProcessResult
@@ -133,7 +138,7 @@ void print(ref LineData[string] data)
                 first = false;
                 json.object["ts"] = ts;
                 json.object["name"] = lineData.name;
-                json.object["dur"] = lineData.time;
+                json.object["dur"] = lineData.timePerCall();
                 stdout.write(json);
         }
 
@@ -148,12 +153,14 @@ void print(ref LineData[string] data)
                                 stderr.writeln("WARNING: Orphan entry found: ", call[0]);
                                 continue;
                         }
-                        foreach (_; repeat(true).take(count))
+                        auto tpc = entry.timePerCall();
+                        stderr.writeln("TPC: ", tpc, " for ", entry.name);
+                        for (auto i = 0; i < count; i++)
                         {
-                                auto tsAfter = ts + entry.time;
+
                                 printJSON(entry);
                                 printAll(entry.calls);
-                                ts = tsAfter;
+                                ts += tpc;
                         }
                 }
         }
@@ -174,9 +181,9 @@ void addLine(ref LineData lineData, char[] line)
 {
         import std.algorithm.searching : startsWith, findSplit;
         import std.algorithm.iteration : filter, splitter, map;
-        import std.conv : to;
+        import std.array : array;
         import std.demangle : demangle;
-        import std.range : take, back, empty;
+        import std.range : back, empty;
         import std.string : strip;
         import std.typecons : tuple;
         import std.stdio : stderr;
@@ -195,12 +202,11 @@ void addLine(ref LineData lineData, char[] line)
                         auto items = dline[1 .. $].splitter('\t')
                                 .map!(p => p.strip)
                                 .filter!(p => !p.empty)
-                                .take(2);
-                        auto count = items.consumeOne;
-                        auto text = items.consumeOne;
-                        if (count !is null && text !is null)
+                                .array;
+                        if (items.length == 2)
                         {
-                                lineData.calls ~= tuple(demangle(text), count.to!uint);
+                                lineData.calls ~= tuple(demangle(items[1]), items[0].toNumeric!uint(
+                                                line));
                         }
                         else
                         {
@@ -210,28 +216,20 @@ void addLine(ref LineData lineData, char[] line)
         }
         else
         {
-                auto parts = dline.findSplit("\t");
-                if (!parts[1].empty)
+                auto parts = dline.splitter('\t')
+                        .map!(p => p.strip)
+                        .array;
+                if (parts.length == 4)
                 {
                         lineData.name = demangle(parts[0]);
-                        lineData.time = findTime(parts[2]);
+                        lineData.callCount = parts[1].toNumeric!long(line);
+                        lineData.time = parts[2].toNumeric!long(line);
                 }
                 else
                 {
-                        stderr.writeln("WARNING: Invalid function name line (not <name>\\t<time>): '", dline, "'");
+                        stderr.writeln("WARNING: Invalid function name line (not <name>\\t<count>\\t<total-time>\\t<own-time>): '", dline, "'");
                 }
         }
-}
-
-auto consumeOne(T)(ref T range)
-{
-        if (!range.empty)
-        {
-                scope (exit)
-                        range.popFront;
-                return range.front;
-        }
-        return null;
 }
 
 string decodeLatin(char[] line)
@@ -251,22 +249,19 @@ string decodeLatin(char[] line)
         return result.to!string;
 }
 
-long findTime(string line)
+N toNumeric(N)(string value, char[] line)
 {
         import std.conv : to;
         import std.string : isNumeric;
-        import std.algorithm.iteration : splitter;
-        import std.range : dropBackOne, back;
         import std.stdio : stderr;
 
-        auto item = line.splitter('\t').dropBackOne.back;
-        if (item.isNumeric)
+        if (value.isNumeric)
         {
-                return item.to!long;
+                return value.to!N;
         }
         else
         {
-                stderr.writeln("ERROR: time data not numeric in '", line, "'");
+                stderr.writeln("ERROR: data not numeric in '", line, "'");
         }
         return 0;
 }
