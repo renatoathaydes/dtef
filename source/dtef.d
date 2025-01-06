@@ -116,8 +116,8 @@ ProcessResult process(char[] line, ref LineData lineData)
 
 void print(ref LineData[string] data)
 {
-        import std.range : empty, back, repeat, take;
-        import std.stdio : stdout;
+        import std.range : empty, repeat, take;
+        import std.stdio : stdout, stderr;
         import std.json : JSONValue;
         import std.typecons : Tuple;
 
@@ -145,8 +145,6 @@ void print(ref LineData[string] data)
                         auto entry = call[0] in data;
                         if (!entry)
                         {
-                                import std.stdio : stderr;
-
                                 stderr.writeln("WARNING: Orphan entry found: ", call[0]);
                                 continue;
                         }
@@ -165,8 +163,6 @@ void print(ref LineData[string] data)
         {
                 if (entry.calledBy.empty)
                 {
-                        import std.stdio;
-
                         stderr.writeln("ROOT: ", entry.name);
                         printJSON(&entry);
                         printAll(entry.calls);
@@ -180,7 +176,7 @@ void addLine(ref LineData lineData, char[] line)
         import std.algorithm.iteration : filter, splitter, map;
         import std.conv : to;
         import std.demangle : demangle;
-        import std.range : take, takeOne, front, back, empty, save;
+        import std.range : take, back, empty;
         import std.string : strip;
         import std.typecons : tuple;
         import std.stdio : stderr;
@@ -240,7 +236,7 @@ auto consumeOne(T)(ref T range)
 
 string decodeLatin(char[] line)
 {
-        import std.encoding;
+        import std.encoding : EncodingSchemeLatin2;
         import std.conv : to;
 
         dchar[] result;
@@ -261,6 +257,7 @@ long findTime(string line)
         import std.string : isNumeric;
         import std.algorithm.iteration : splitter;
         import std.range : dropBackOne, back;
+        import std.stdio : stderr;
 
         auto item = line.splitter('\t').dropBackOne.back;
         if (item.isNumeric)
@@ -269,8 +266,6 @@ long findTime(string line)
         }
         else
         {
-                import std.stdio : stderr;
-
                 stderr.writeln("ERROR: time data not numeric in '", line, "'");
         }
         return 0;
