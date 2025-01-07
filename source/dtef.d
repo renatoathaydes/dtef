@@ -1,3 +1,8 @@
+import std.typecons : Tuple;
+import std.stdio : File;
+
+alias NameCount = Tuple!(string, "name", uint, "count");
+
 /// Terminal app for converting D's log.trace (generated using dmd -profile)
 /// to the Google Trace Event Format (https://docs.google.com/document/d/1CvAClvFfyA5R-PhYUmn5OOQtYMH4h6I0nSsKchNAySU/edit?tab=t.0).
 ///
@@ -8,12 +13,12 @@
 /// If not given, parses trace.log in the working directory.
 int main(string[] args)
 {
-        import std.stdio : File, write, writeln;
-        import std.algorithm.iteration : map;
-        import std.typecons : Tuple;
+        import std.stdio : write, writeln, stderr;
+        import std.process : environment;
         import std.range : empty;
 
         string path;
+        bool isDebug = !environment.get("DEBUG", "").empty;
 
         if (args.length == 2)
         {
@@ -31,14 +36,41 @@ int main(string[] args)
                 path = "trace.log";
         }
 
+        LineData[string] data = void;
+        {
+                auto file = File(path);
+                data = parseFile(file);
+        }
+
+        write("[");
+        if (isDebug)
+        {
+                foreach (entry; data)
+                        stderr.writeln(entry);
+        }
+        print(data);
+        writeln("]");
+
+        return 0;
+}
+
+LineData[string] parseFile(File file)
+{
+        return parseLines(file.byLine);
+}
+
+/// Parse a Range that gives each line as a `const(char)[]`.
+LineData[string] parseLines(R)(R lines)
+{
+        import std.range : empty;
+
         string[] cb;
-        Tuple!(string, uint)[] ca;
+        NameCount[] ca;
         LineData[string] data;
         cb.reserve(32);
         ca.reserve(32);
         LineData lineData = {calledBy: cb, calls: ca};
-        auto file = File(path);
-        loop: foreach (line; file.byLine)
+        loop: foreach (const(char)[] line; lines)
         {
                 auto res = process(line, lineData);
                 final switch (res) with (ProcessResult)
@@ -58,32 +90,36 @@ int main(string[] args)
                         continue;
                 }
         }
-        write("[");
-        print(data);
-        writeln("]");
-        return 0;
+        return data;
 }
 
 struct LineData
 {
-        import std.typecons : Tuple;
-
-        string[] calledBy;
-        Tuple!(string, uint)[] calls;
         string name;
+        string[] calledBy;
+        NameCount[] calls;
         long callCount;
         long time;
 
         this(ref return scope LineData lineData)
         {
+                name = lineData.name;
                 calledBy = lineData.calledBy.dup;
                 calls = lineData.calls.dup;
-                name = lineData.name;
                 callCount = lineData.callCount;
                 time = lineData.time;
         }
 
-        long timePerCall() => callCount == 0 || time == 0 ? 0 : time / callCount;
+        long timePerCall() const pure => callCount == 0 || time == 0 ? 0 : time / callCount;
+
+        LineData copyAndReset()
+        {
+                auto result = LineData(this);
+                name = "";
+                calledBy.length = 0;
+                calls.length = 0;
+                return result;
+        }
 
 }
 
@@ -94,16 +130,7 @@ enum ProcessResult
         addLineData,
 }
 
-LineData copyAndReset(ref LineData lineData)
-{
-        auto result = LineData(lineData);
-        lineData.calledBy.length = 0;
-        lineData.calls.length = 0;
-        lineData.name = "";
-        return result;
-}
-
-ProcessResult process(char[] line, ref LineData lineData)
+ProcessResult process(in char[] line, ref LineData lineData)
 {
         import std.range : empty;
         import std.algorithm.searching : startsWith;
@@ -119,20 +146,18 @@ ProcessResult process(char[] line, ref LineData lineData)
         return ProcessResult.goOn;
 }
 
-void print(ref LineData[string] data)
+void print(const ref LineData[string] data)
 {
         import std.range : empty, repeat, take;
         import std.stdio : stdout, stderr;
         import std.json : JSONValue;
-        import std.typecons : Tuple;
 
         bool first = true;
-        long ts;
         auto json = JSONValue(["cat": "call", "ph": "X"]);
         json.object["pid"] = 0;
         json.object["tid"] = 0;
 
-        void printJSON(LineData* lineData)
+        void printJSON(const ref LineData lineData, long ts)
         {
                 stdout.writeln(first ? "" : ",");
                 first = false;
@@ -142,25 +167,23 @@ void print(ref LineData[string] data)
                 stdout.write(json);
         }
 
-        void printAll(Tuple!(string, uint)[] calls)
+        void printAll(const ref LineData lineData, long ts)
         {
-                foreach (ref call; calls)
+                printJSON(lineData, ts);
+                auto callTs = ts;
+                foreach (const ref call; lineData.calls)
                 {
-                        auto count = call[1];
-                        auto entry = call[0] in data;
+                        auto entry = call.name in data;
                         if (!entry)
                         {
-                                stderr.writeln("WARNING: Orphan entry found: ", call[0]);
+                                stderr.writeln("WARNING: Orphan entry found: ", call.name);
                                 continue;
                         }
                         auto tpc = entry.timePerCall();
-                        stderr.writeln("TPC: ", tpc, " for ", entry.name);
-                        for (auto i = 0; i < count; i++)
+                        for (auto i = 0; i < call.count; i++)
                         {
-
-                                printJSON(entry);
-                                printAll(entry.calls);
-                                ts += tpc;
+                                printAll(*entry, callTs);
+                                callTs += tpc;
                         }
                 }
         }
@@ -170,14 +193,12 @@ void print(ref LineData[string] data)
         {
                 if (entry.calledBy.empty)
                 {
-                        stderr.writeln("ROOT: ", entry.name);
-                        printJSON(&entry);
-                        printAll(entry.calls);
+                        printAll(entry, 0);
                 }
         }
 }
 
-void addLine(ref LineData lineData, char[] line)
+void addLine(ref LineData lineData, in char[] line)
 {
         import std.algorithm.searching : startsWith, findSplit;
         import std.algorithm.iteration : filter, splitter, map;
@@ -205,8 +226,9 @@ void addLine(ref LineData lineData, char[] line)
                                 .array;
                         if (items.length == 2)
                         {
-                                lineData.calls ~= tuple(demangle(items[1]), items[0].toNumeric!uint(
-                                                line));
+                                auto name = demangle(items[1]);
+                                auto count = items[0].toNumeric!uint(line);
+                                lineData.calls ~= tuple!("name", "count")(name, count);
                         }
                         else
                         {
@@ -222,7 +244,8 @@ void addLine(ref LineData lineData, char[] line)
                 if (parts.length == 4)
                 {
                         lineData.name = demangle(parts[0]);
-                        lineData.callCount = parts[1].toNumeric!long(line);
+                        lineData.callCount = parts[1].toNumeric!long(
+                                line);
                         lineData.time = parts[2].toNumeric!long(line);
                 }
                 else
@@ -232,7 +255,7 @@ void addLine(ref LineData lineData, char[] line)
         }
 }
 
-string decodeLatin(char[] line)
+string decodeLatin(in char[] line)
 {
         import std.encoding : EncodingSchemeLatin2;
         import std.conv : to;
@@ -249,7 +272,7 @@ string decodeLatin(char[] line)
         return result.to!string;
 }
 
-N toNumeric(N)(string value, char[] line)
+N toNumeric(N)(string value, in char[] line)
 {
         import std.conv : to;
         import std.string : isNumeric;
