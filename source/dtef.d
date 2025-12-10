@@ -1,58 +1,8 @@
 import std.typecons : Tuple;
 import std.stdio : File;
+import tested;
 
 alias NameCount = Tuple!(string, "name", uint, "count");
-
-/// Terminal app for converting D's log.trace (generated using dmd -profile)
-/// to the Google Trace Event Format (https://docs.google.com/document/d/1CvAClvFfyA5R-PhYUmn5OOQtYMH4h6I0nSsKchNAySU/edit?tab=t.0).
-///
-/// Files in the TEF format may be visualized using chrome://tracing or https://www.speedscope.app/ for example.
-///
-/// Usage:
-///   dtef [<trace.log file>]
-/// If not given, parses trace.log in the working directory.
-int main(string[] args)
-{
-        import std.stdio : write, writeln, stderr;
-        import std.process : environment;
-        import std.range : empty;
-
-        string path;
-        bool isDebug = !environment.get("DEBUG", "").empty;
-
-        if (args.length == 2)
-        {
-                path = args[1];
-        }
-        else if (args.length > 2)
-        {
-                import std.stdio : stderr;
-
-                stderr.writeln("ERROR: Usage - only one argument expected");
-                return 1;
-        }
-        else
-        {
-                path = "trace.log";
-        }
-
-        LineData[string] data = void;
-        {
-                auto file = File(path);
-                data = parseFile(file);
-        }
-
-        write("[");
-        if (isDebug)
-        {
-                foreach (entry; data)
-                        stderr.writeln(entry);
-        }
-        print(data);
-        writeln("]");
-
-        return 0;
-}
 
 LineData[string] parseFile(File file)
 {
@@ -198,12 +148,42 @@ void print(const ref LineData[string] data)
         }
 }
 
+string computeName(string name) {
+  import std.demangle : demangle;
+  import std.algorithm.searching : find, startsWith;
+  import std.range.primitives : front, empty;
+  import std.string : stripLeft;
+
+  static const keywords = ["@nogc", "nothrow", "pure", "@trusted", "@system", "@safe"];
+  string prefixKeyword(string n) @nogc {
+    auto keyword = keywords.find!((a) => n.startsWith(a));
+    if (keyword.empty) {
+      return "";
+    }
+    return keyword.front;
+  }
+  auto n = demangle(name);
+  string prefix;
+  while (!(prefix = prefixKeyword(n)).empty) {
+    n = n[prefix.length .. $].stripLeft;
+  }
+  return n;
+}
+
+@name("computeName")
+unittest {
+  assert(computeName("foo") == "foo");
+  assert(computeName("@nogc foo") == "foo");
+  assert(computeName("@nogc nothrow foo") == "foo");
+  assert(computeName("@nogc nothrow @system @trusted @safe foo") == "foo");
+  assert(computeName("abc def") == "abc def");
+}
+
 void addLine(ref LineData lineData, in char[] line)
 {
         import std.algorithm.searching : startsWith, findSplit;
         import std.algorithm.iteration : filter, splitter, map;
         import std.array : array;
-        import std.demangle : demangle;
         import std.range : back, empty;
         import std.string : strip;
         import std.typecons : tuple;
@@ -216,7 +196,7 @@ void addLine(ref LineData lineData, in char[] line)
                 if (lineData.name.empty)
                 {
                         auto item = dline[1 .. $].splitter('\t').back;
-                        lineData.calledBy ~= demangle(item);
+                        lineData.calledBy ~= computeName(item);
                 }
                 else
                 {
@@ -226,7 +206,7 @@ void addLine(ref LineData lineData, in char[] line)
                                 .array;
                         if (items.length == 2)
                         {
-                                auto name = demangle(items[1]);
+                                auto name = computeName(items[1]);
                                 auto count = items[0].toNumeric!uint(line);
                                 lineData.calls ~= tuple!("name", "count")(name, count);
                         }
@@ -243,7 +223,7 @@ void addLine(ref LineData lineData, in char[] line)
                         .array;
                 if (parts.length == 4)
                 {
-                        lineData.name = demangle(parts[0]);
+                        lineData.name = computeName(parts[0]);
                         lineData.callCount = parts[1].toNumeric!long(
                                 line);
                         lineData.time = parts[2].toNumeric!long(line);
@@ -286,5 +266,59 @@ N toNumeric(N)(string value, in char[] line)
         {
                 stderr.writeln("ERROR: data not numeric in '", line, "'");
         }
+        return 0;
+}
+
+version(unittest) {
+} else:
+
+/// Terminal app for converting D's log.trace (generated using dmd -profile)
+/// to the Google Trace Event Format (https://docs.google.com/document/d/1CvAClvFfyA5R-PhYUmn5OOQtYMH4h6I0nSsKchNAySU/edit?tab=t.0).
+///
+/// Files in the TEF format may be visualized using chrome://tracing or https://www.speedscope.app/ for example.
+///
+/// Usage:
+///   dtef [<trace.log file>]
+/// If not given, parses trace.log in the working directory.
+int main(string[] args)
+{
+        import std.stdio : write, writeln, stderr;
+        import std.process : environment;
+        import std.range : empty;
+
+        string path;
+        bool isDebug = !environment.get("DEBUG", "").empty;
+
+        if (args.length == 2)
+        {
+                path = args[1];
+        }
+        else if (args.length > 2)
+        {
+                import std.stdio : stderr;
+
+                stderr.writeln("ERROR: Usage - only one argument expected");
+                return 1;
+        }
+        else
+        {
+                path = "trace.log";
+        }
+
+        LineData[string] data = void;
+        {
+                auto file = File(path);
+                data = parseFile(file);
+        }
+
+        write("[");
+        if (isDebug)
+        {
+                foreach (entry; data)
+                        stderr.writeln(entry);
+        }
+        print(data);
+        writeln("]");
+
         return 0;
 }

@@ -1,0 +1,10 @@
+name "dtef"
+description "Converts DMD -profile text format to Google Trace Event Format."
+authors "Renato Athaydes"
+copyright "Copyright © 2025, Renato Athaydes"
+license "GPL-3.0"
+
+configuration "unittest" {
+    dependency "tested" version="~>0.9.5"
+    targetPath "target/test"
+}

@@ -1,4 +1,5 @@
 import dtef;
+import tested;
 
 void assertEquals(T)(T actual, T expected)
 {
@@ -8,17 +9,17 @@ void assertEquals(T)(T actual, T expected)
                         .to!string);
 }
 
-// Basic Main Line Processing
+@name("Basic Main Line Processing")
 unittest
 {
         LineData lineData = {};
         process("_D4main5sleepFNbNilZv	4	152406643	152403752", lineData);
-        assertEquals(lineData.name, "nothrow @nogc void main.sleep(long)");
+        assertEquals(lineData.name, "void main.sleep(long)");
         assertEquals(lineData.time, 152_406_643L);
         assertEquals(lineData.callCount, 4);
 }
 
-// Basic Callee Line Processing
+@name("Basic Callee Line Processing")
 unittest
 {
         import std.typecons : tuple;
@@ -30,11 +31,11 @@ unittest
         assertEquals(lineData.callCount, 0);
         assertEquals(lineData.calledBy, []);
         assertEquals(lineData.calls, [
-                tuple!("name", "count")("nothrow @nogc void main.fast2()", cast(uint) 1)
+                tuple!("name", "count")("void main.fast2()", cast(uint) 1)
         ]);
 }
 
-// Full Entry Processing
+@name("Full Entry Processing")
 unittest
 {
         import std.typecons : tuple;
@@ -50,18 +51,18 @@ unittest
                         res1, res2, res3, res4
                 ]);
         }
-        assertEquals(lineData.name, "nothrow @nogc void main.slow()");
+        assertEquals(lineData.name, "void main.slow()");
         assertEquals(lineData.time, 114_157_000L);
         assertEquals(lineData.callCount, 2);
         assertEquals(lineData.calledBy, [
-                "nothrow @nogc void main.fastSlow!().fastSlow()"
+                "void main.fastSlow!().fastSlow()"
         ]);
         assertEquals(lineData.calls, [
-                tuple!("name", "count")("nothrow @nogc void main.sleep(long)", cast(uint) 2)
+                tuple!("name", "count")("void main.sleep(long)", cast(uint) 2)
         ]);
 }
 
-// Full File Processing
+@name("Full File Processing")
 unittest
 {
         import std.typecons : Tuple;
@@ -119,61 +120,61 @@ _Dmain	0	152415759	2710
         auto result = parseLines(input);
 
         assertEquals(result, [
-                "nothrow @nogc void main.fast()": LineData("nothrow @nogc void main.fast()", [
-                        "nothrow @nogc void main.fast2()",
-                        "nothrow @nogc void main.fastSlow!().fastSlow()"
+                "void main.fast()": LineData("void main.fast()", [
+                        "void main.fast2()",
+                        "void main.fastSlow!().fastSlow()"
                 ], [
-                        Tuple!(string, "name", uint, "count")("nothrow @nogc void main.sleep(long)", 3)
+                        Tuple!(string, "name", uint, "count")("void main.sleep(long)", 3)
                 ], 3, 38251798),
-                "nothrow @nogc void main.nothing()": LineData("nothrow @nogc void main.nothing()", [
+                "void main.nothing()": LineData("void main.nothing()", [
                         "_Dmain"
                 ], [
-                        Tuple!(string, "name", uint, "count")("nothrow @nogc void main.doNothing()", 2)
+                        Tuple!(string, "name", uint, "count")("void main.doNothing()", 2)
                 ], 1, 568),
-                "pure nothrow @nogc @safe long core.time.convert!(\"msecs\", \"hnsecs\").convert(long)": LineData(
-                        "pure nothrow @nogc @safe long core.time.convert!(\"msecs\", \"hnsecs\").convert(long)", [
-                        "pure nothrow @nogc @safe core.time.Duration core.time.dur!(\"msecs\").dur(long)"
+                "long core.time.convert!(\"msecs\", \"hnsecs\").convert(long)": LineData(
+                        "long core.time.convert!(\"msecs\", \"hnsecs\").convert(long)", [
+                        "core.time.Duration core.time.dur!(\"msecs\").dur(long)"
                 ], [], 4, 347),
-                "pure nothrow @nogc @trusted bool core.internal.array.equality.__equals!(char, char).__equals(scope const(char[]), scope const(char[]))": LineData(
-                        "pure nothrow @nogc @trusted bool core.internal.array.equality.__equals!(char, char).__equals(scope const(char[]), scope const(char[]))", [
+                "bool core.internal.array.equality.__equals!(char, char).__equals(scope const(char[]), scope const(char[]))": LineData(
+                        "bool core.internal.array.equality.__equals!(char, char).__equals(scope const(char[]), scope const(char[]))", [
                 ], [], 0, 315),
-                "nothrow @nogc void main.fast2()": LineData("nothrow @nogc void main.fast2()", [
+                "void main.fast2()": LineData("void main.fast2()", [
                         "_Dmain"
                 ], [
-                        Tuple!(string, "name", uint, "count")("nothrow @nogc void main.fast()", 2)
+                        Tuple!(string, "name", uint, "count")("void main.fast()", 2)
                 ], 1, 25983616),
-                "nothrow @nogc void main.doNothing()": LineData("nothrow @nogc void main.doNothing()", [
-                        "nothrow @nogc void main.nothing()"
+                "void main.doNothing()": LineData("void main.doNothing()", [
+                        "void main.nothing()"
                 ], [], 2, 132),
-                "pure nothrow @nogc @safe core.time.Duration core.time.dur!(\"msecs\").dur(long)": LineData(
-                        "pure nothrow @nogc @safe core.time.Duration core.time.dur!(\"msecs\").dur(long)", [
-                        "nothrow @nogc void main.sleep(long)"
+                "core.time.Duration core.time.dur!(\"msecs\").dur(long)": LineData(
+                        "core.time.Duration core.time.dur!(\"msecs\").dur(long)", [
+                        "void main.sleep(long)"
                 ], [
-                        Tuple!(string, "name", uint, "count")("pure nothrow @nogc @safe long core.time.convert!(\"msecs\", \"hnsecs\").convert(long)", 4)
+                        Tuple!(string, "name", uint, "count")("long core.time.convert!(\"msecs\", \"hnsecs\").convert(long)", 4)
                 ], 4, 2891),
                 "_Dmain": LineData("_Dmain", [], [
-                        Tuple!(string, "name", uint, "count")("nothrow @nogc void main.fast2()", 1),
-                        Tuple!(string, "name", uint, "count")("nothrow @nogc void main.fastSlow!().fastSlow()", 1),
-                        Tuple!(string, "name", uint, "count")("nothrow @nogc void main.nothing()", 1)
+                        Tuple!(string, "name", uint, "count")("void main.fast2()", 1),
+                        Tuple!(string, "name", uint, "count")("void main.fastSlow!().fastSlow()", 1),
+                        Tuple!(string, "name", uint, "count")("void main.nothing()", 1)
                 ], 0, 152415759),
-                "nothrow @nogc void main.sleep(long)": LineData("nothrow @nogc void main.sleep(long)", [
-                        "nothrow @nogc void main.fast()",
-                        "nothrow @nogc void main.slow()"
+                "void main.sleep(long)": LineData("void main.sleep(long)", [
+                        "void main.fast()",
+                        "void main.slow()"
                 ], [
                         Tuple!(string, "name", uint, "count")(
-                        "pure nothrow @nogc @safe core.time.Duration core.time.dur!(\"msecs\").dur(long)", 4)
+                        "core.time.Duration core.time.dur!(\"msecs\").dur(long)", 4)
                 ], 4, 152406643),
-                "nothrow @nogc void main.fastSlow!().fastSlow()": LineData(
-                        "nothrow @nogc void main.fastSlow!().fastSlow()", [
+                "void main.fastSlow!().fastSlow()": LineData(
+                        "void main.fastSlow!().fastSlow()", [
                         "_Dmain"
                 ], [
-                        Tuple!(string, "name", uint, "count")("nothrow @nogc void main.fast()", 1),
-                        Tuple!(string, "name", uint, "count")("nothrow @nogc void main.slow()", 1)
+                        Tuple!(string, "name", uint, "count")("void main.fast()", 1),
+                        Tuple!(string, "name", uint, "count")("void main.slow()", 1)
                 ], 1, 126428865),
-                "nothrow @nogc void main.slow()": LineData("nothrow @nogc void main.slow()", [
-                        "nothrow @nogc void main.fastSlow!().fastSlow()"
+                "void main.slow()": LineData("void main.slow()", [
+                        "void main.fastSlow!().fastSlow()"
                 ], [
-                        Tuple!(string, "name", uint, "count")("nothrow @nogc void main.sleep(long)", 1)
+                        Tuple!(string, "name", uint, "count")("void main.sleep(long)", 1)
                 ], 1, 114157000)
         ]);
 }
