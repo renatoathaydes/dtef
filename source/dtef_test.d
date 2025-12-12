@@ -1,3 +1,5 @@
+version(unittest):
+
 import dtef;
 import tested;
 

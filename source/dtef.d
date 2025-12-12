@@ -1,47 +1,7 @@
 import std.typecons : Tuple;
 import std.stdio : File;
-import tested;
 
 alias NameCount = Tuple!(string, "name", uint, "count");
-
-LineData[string] parseFile(File file)
-{
-        return parseLines(file.byLine);
-}
-
-/// Parse a Range that gives each line as a `const(char)[]`.
-LineData[string] parseLines(R)(R lines)
-{
-        import std.range : empty;
-
-        string[] cb;
-        NameCount[] ca;
-        LineData[string] data;
-        cb.reserve(32);
-        ca.reserve(32);
-        LineData lineData = {calledBy: cb, calls: ca};
-        loop: foreach (const(char)[] line; lines)
-        {
-                auto res = process(line, lineData);
-                final switch (res) with (ProcessResult)
-                {
-                case stop:
-                        auto name = lineData.name;
-                        if (!name.empty)
-                        {
-                                data[name] = lineData.copyAndReset;
-                        }
-                        break loop;
-                case addLineData:
-                        auto name = lineData.name;
-                        data[name] = lineData.copyAndReset;
-                        break;
-                case goOn:
-                        continue;
-                }
-        }
-        return data;
-}
 
 struct LineData
 {
@@ -80,20 +40,44 @@ enum ProcessResult
         addLineData,
 }
 
-ProcessResult process(in char[] line, ref LineData lineData)
+/// Parse a D trace log file.
+LineData[string] parseFile(File file)
+{
+        return parseLines(file.byLine);
+}
+
+/// Parse a Range that gives each line as a `const(char)[]`.
+LineData[string] parseLines(R)(R lines)
 {
         import std.range : empty;
-        import std.algorithm.searching : startsWith;
 
-        if (line.empty)
-                return ProcessResult.stop;
-        if (line.startsWith("-----"))
-                with (ProcessResult)
+        string[] cb;
+        NameCount[] ca;
+        LineData[string] data;
+        cb.reserve(32);
+        ca.reserve(32);
+        LineData lineData = {calledBy: cb, calls: ca};
+        loop: foreach (const(char)[] line; lines)
+        {
+                auto res = process(line, lineData);
+                final switch (res) with (ProcessResult)
                 {
-                        return lineData.name.empty ? goOn : addLineData;
+                case stop:
+                        auto name = lineData.name;
+                        if (!name.empty)
+                        {
+                                data[name] = lineData.copyAndReset;
+                        }
+                        break loop;
+                case addLineData:
+                        auto name = lineData.name;
+                        data[name] = lineData.copyAndReset;
+                        break;
+                case goOn:
+                        continue;
                 }
-        lineData.addLine(line);
-        return ProcessResult.goOn;
+        }
+        return data;
 }
 
 void print(const ref LineData[string] data)
@@ -148,62 +132,110 @@ void print(const ref LineData[string] data)
         }
 }
 
-string computeName(string name) {
-  import std.demangle : demangle;
-  import std.algorithm.searching : find, startsWith;
-  import std.range.primitives : front, empty;
-  import std.string : stripLeft;
+ProcessResult process(in char[] line, ref LineData lineData)
+{
+        import std.range : empty;
+        import std.algorithm.searching : startsWith;
 
-  static const keywords = ["@nogc", "nothrow", "pure", "@trusted", "@system", "@safe"];
-  string prefixKeyword(string n) @nogc {
-    auto keyword = keywords.find!((a) => n.startsWith(a));
-    if (keyword.empty) {
-      return "";
-    }
-    return keyword.front;
-  }
-  auto n = demangle(name);
-  string prefix;
-  while (!(prefix = prefixKeyword(n)).empty) {
-    n = n[prefix.length .. $].stripLeft;
-  }
-  return n;
+        if (line.empty)
+                return ProcessResult.stop;
+        if (line.startsWith("-----"))
+                with (ProcessResult)
+                {
+                        return lineData.name.empty ? goOn : addLineData;
+                }
+        lineData.addLine(line);
+        return ProcessResult.goOn;
 }
 
-@name("computeName")
-unittest {
-  assert(computeName("foo") == "foo");
-  assert(computeName("@nogc foo") == "foo");
-  assert(computeName("@nogc nothrow foo") == "foo");
-  assert(computeName("@nogc nothrow @system @trusted @safe foo") == "foo");
-  assert(computeName("abc def") == "abc def");
+private:
+
+string computeName(string name)
+{
+        import std.demangle : demangle;
+        import std.algorithm.searching : find, startsWith;
+        import std.range.primitives : front, empty;
+        import std.string : stripLeft;
+
+        static const keywords = [
+                "@nogc", "nothrow", "pure", "@trusted", "@system", "@safe"
+        ];
+        string prefixKeyword(string n) @nogc
+        {
+                auto keyword = keywords.find!((a) => n.startsWith(a));
+                if (keyword.empty)
+                {
+                        return "";
+                }
+                return keyword.front;
+        }
+
+        auto n = demangle(name);
+        string prefix;
+        while (!(prefix = prefixKeyword(n)).empty)
+        {
+                n = n[prefix.length .. $].stripLeft;
+        }
+        return n;
+}
+
+version (unittest)
+{
+        import tested;
+
+        @name("computeName")
+        unittest
+        {
+                assert(computeName("foo") == "foo");
+                assert(computeName("@nogc foo") == "foo");
+                assert(computeName("@nogc nothrow foo") == "foo");
+                assert(computeName("@nogc nothrow @system @trusted @safe foo") == "foo");
+                assert(computeName("abc def") == "abc def");
+        }
+}
+
+/// Break up the line into up to 4 parts using '\t' as separator.
+/// Returns a slice backed by the provided array.
+string[] parts(inout string line, out string[4] parts) pure @nogc
+{
+        import std.string : indexOf, count, strip;
+
+        auto parts_count = line.count('\t') + 1;
+        if (parts_count > 4)
+                return parts[0 .. 0];
+        size_t begin = 0;
+        for (auto i = 0; i < parts_count; i++)
+        {
+                auto next_end = line.indexOf('\t', begin);
+                parts[i] = line[begin .. next_end >= 0 ? next_end: $].strip;
+                begin = next_end + 1;
+        }
+        return parts[0 .. parts_count];
 }
 
 void addLine(ref LineData lineData, in char[] line)
 {
-        import std.algorithm.searching : startsWith, findSplit;
-        import std.algorithm.iteration : filter, splitter, map;
-        import std.array : array;
+        import std.algorithm.searching : startsWith;
         import std.range : back, empty;
-        import std.string : strip;
         import std.typecons : tuple;
         import std.stdio : stderr;
+
+        // array that will hold a split line
+        string[4] parts;
 
         // the file is encoded as Latin-2 so it can fail utf operations
         auto dline = decodeLatin(line);
         if (dline.startsWith("\t"))
         {
+                // dline is a caller line if the name is still empty, or a callee line otherwise.
                 if (lineData.name.empty)
                 {
-                        auto item = dline[1 .. $].splitter('\t').back;
+                        auto item = dline.parts(parts).back;
                         lineData.calledBy ~= computeName(item);
                 }
                 else
                 {
-                        auto items = dline[1 .. $].splitter('\t')
-                                .map!(p => p.strip)
-                                .filter!(p => !p.empty)
-                                .array;
+                        auto items = dline[1 .. $].parts(parts);
                         if (items.length == 2)
                         {
                                 auto name = computeName(items[1]);
@@ -218,15 +250,14 @@ void addLine(ref LineData lineData, in char[] line)
         }
         else
         {
-                auto parts = dline.splitter('\t')
-                        .map!(p => p.strip)
-                        .array;
-                if (parts.length == 4)
+                // dline is the actual call line, collect its name and time
+                auto items = dline.parts(parts);
+                if (items.length == 4)
                 {
-                        lineData.name = computeName(parts[0]);
-                        lineData.callCount = parts[1].toNumeric!long(
+                        lineData.name = computeName(items[0]);
+                        lineData.callCount = items[1].toNumeric!long(
                                 line);
-                        lineData.time = parts[2].toNumeric!long(line);
+                        lineData.time = items[2].toNumeric!long(line);
                 }
                 else
                 {

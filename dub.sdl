@@ -5,6 +5,10 @@ copyright "Copyright © 2025, Renato Athaydes"
 license "GPL-3.0"
 mainSourceFile "source/main.d"
 
+configuration "application" {
+    targetType "executable"
+}
+
 configuration "unittest" {
     dependency "tested" version="~>0.9.5"
     targetPath "target/test"
