@@ -1,5 +1,15 @@
 import dtef;
 
+immutable dtefHelp = "dtef is a utility to parse D's trace.log files.
+To generate a trace file, use the -profile option when compiling D code, then run the binary.
+
+Usage:
+    dtef [options...] [file...]
+
+If no file is provided, dtef will parse the 'trace.log' file in the working directory.
+
+Options:";
+
 /// Terminal app for converting D's log.trace (generated using dmd -profile)
 /// to the Google Trace Event Format (https://docs.google.com/document/d/1CvAClvFfyA5R-PhYUmn5OOQtYMH4h6I0nSsKchNAySU/edit?tab=t.0).
 ///
@@ -10,41 +20,56 @@ import dtef;
 /// If not given, parses trace.log in the working directory.
 int main(string[] args)
 {
+        import std.getopt;
         import std.stdio : File, write, writeln, stderr;
         import std.process : environment;
         import std.range : empty;
 
-        string path;
-        bool isDebug = !environment.get("DEBUG", "").empty;
+        bool isDebug;
+        OutputMode outputMode;
+        GetoptResult optResult;
 
-        if (args.length == 2)
+        try
         {
-                path = args[1];
+                optResult = getopt(args,
+                        "mode|m", "output mode (json | text)", &outputMode,
+                        "debug|d", "whether to enable debug output", &isDebug);
         }
-        else if (args.length > 2)
+        catch (GetOptException e)
         {
-                stderr.writeln("ERROR: Usage - only one argument expected");
+                writeln("ERROR: ", e.msg);
+                defaultGetoptPrinter(dtefHelp, optResult.options);
                 return 1;
         }
-        else
+
+        if (optResult.helpWanted)
         {
-                path = "trace.log";
+                defaultGetoptPrinter(dtefHelp, optResult.options);
+                return 0;
         }
 
-        LineData[string] data = void;
+        auto files = args[1 .. $];
+
+        if (files.empty)
         {
-                auto file = File(path);
-                data = parseFile(file);
+                files = ["trace.log"];
         }
 
-        write("[");
-        if (isDebug)
+        foreach (path; files)
         {
-                foreach (entry; data)
-                        stderr.writeln(entry);
+                LineData[string] data = void;
+                {
+                        auto file = File(path);
+                        data = parseFile(file);
+                }
+
+                if (isDebug)
+                {
+                        foreach (entry; data)
+                                stderr.writeln(entry);
+                }
+                print(data, outputMode);
         }
-        print(data);
-        writeln("]");
 
         return 0;
 }

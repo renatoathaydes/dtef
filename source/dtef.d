@@ -3,6 +3,12 @@ import std.stdio : File;
 
 alias NameCount = Tuple!(string, "name", uint, "count");
 
+enum OutputMode
+{
+        json,
+        text,
+}
+
 struct LineData
 {
         string name;
@@ -80,7 +86,7 @@ LineData[string] parseLines(R)(R lines)
         return data;
 }
 
-void print(const ref LineData[string] data)
+void print(const ref LineData[string] data, OutputMode mode = OutputMode.json)
 {
         import std.range : empty, repeat, take;
         import std.stdio : stdout, stderr;
@@ -101,35 +107,39 @@ void print(const ref LineData[string] data)
                 stdout.write(json);
         }
 
-        void printAll(const ref LineData lineData, long ts)
+        void printText(const ref LineData lineData, long ts)
         {
-                printJSON(lineData, ts);
-                auto callTs = ts;
-                foreach (const ref call; lineData.calls)
+                stdout.writefln("%dx %s (%d us)", lineData.callCount, lineData.name, lineData.time);
+                if (!lineData.calledBy.empty)
                 {
-                        auto entry = call.name in data;
-                        if (!entry)
+                        stdout.writeln("    Called by:");
+                        foreach (caller; lineData.calledBy)
                         {
-                                stderr.writeln("WARNING: Orphan entry found: ", call.name);
-                                continue;
+                                stdout.writeln("        ", caller);
                         }
-                        auto tpc = entry.timePerCall();
-                        for (auto i = 0; i < call.count; i++)
+                }
+                if (!lineData.calls.empty)
+                {
+                        stdout.writeln("    Calls:");
+                        foreach (callee; lineData.calls)
                         {
-                                printAll(*entry, callTs);
-                                callTs += tpc;
+                                stdout.writeln("        ", callee);
                         }
                 }
         }
 
-        // find the roots, then start printing events as calls are made
-        foreach (ref entry; data)
+        auto printer = mode == OutputMode.json ? &printJSON : &printText;
+
+        if (mode == OutputMode.json)
+                stdout.writeln("[");
+
+        foreach (key, ref lineData; data)
         {
-                if (entry.calledBy.empty)
-                {
-                        printAll(entry, 0);
-                }
+                printer(lineData, lineData.timePerCall());
         }
+
+        if (mode == OutputMode.json)
+                stdout.writeln("]");
 }
 
 ProcessResult process(in char[] line, ref LineData lineData)

@@ -1,6 +1,4 @@
-version(unittest):
-
-import dtef;
+version (unittest)  : import dtef;
 import tested;
 
 void assertEquals(T)(T actual, T expected)
@@ -125,14 +123,20 @@ _Dmain	0	152415759	2710
                 "void main.fast()": LineData("void main.fast()", [
                         "void main.fast2()",
                         "void main.fastSlow!().fastSlow()"
-                ], [
+                ],
+                [
                         Tuple!(string, "name", uint, "count")("void main.sleep(long)", 3)
-                ], 3, 38251798),
+                ],
+                3,
+                38251798),
                 "void main.nothing()": LineData("void main.nothing()", [
                         "_Dmain"
-                ], [
+                ],
+                [
                         Tuple!(string, "name", uint, "count")("void main.doNothing()", 2)
-                ], 1, 568),
+                ],
+                1,
+                568),
                 "long core.time.convert!(\"msecs\", \"hnsecs\").convert(long)": LineData(
                         "long core.time.convert!(\"msecs\", \"hnsecs\").convert(long)", [
                         "core.time.Duration core.time.dur!(\"msecs\").dur(long)"
@@ -142,30 +146,42 @@ _Dmain	0	152415759	2710
                 ], [], 0, 315),
                 "void main.fast2()": LineData("void main.fast2()", [
                         "_Dmain"
-                ], [
+                ],
+                [
                         Tuple!(string, "name", uint, "count")("void main.fast()", 2)
-                ], 1, 25983616),
+                ],
+                1,
+                25983616),
                 "void main.doNothing()": LineData("void main.doNothing()", [
                         "void main.nothing()"
-                ], [], 2, 132),
+                ],
+                [],
+                2,
+                132),
                 "core.time.Duration core.time.dur!(\"msecs\").dur(long)": LineData(
                         "core.time.Duration core.time.dur!(\"msecs\").dur(long)", [
                         "void main.sleep(long)"
                 ], [
-                        Tuple!(string, "name", uint, "count")("long core.time.convert!(\"msecs\", \"hnsecs\").convert(long)", 4)
+                        Tuple!(string, "name", uint, "count")(
+                                "long core.time.convert!(\"msecs\", \"hnsecs\").convert(long)", 4)
                 ], 4, 2891),
                 "_Dmain": LineData("_Dmain", [], [
                         Tuple!(string, "name", uint, "count")("void main.fast2()", 1),
                         Tuple!(string, "name", uint, "count")("void main.fastSlow!().fastSlow()", 1),
                         Tuple!(string, "name", uint, "count")("void main.nothing()", 1)
-                ], 0, 152415759),
+                ],
+                0,
+                152415759),
                 "void main.sleep(long)": LineData("void main.sleep(long)", [
                         "void main.fast()",
                         "void main.slow()"
-                ], [
+                ],
+                [
                         Tuple!(string, "name", uint, "count")(
-                        "core.time.Duration core.time.dur!(\"msecs\").dur(long)", 4)
-                ], 4, 152406643),
+                                "core.time.Duration core.time.dur!(\"msecs\").dur(long)", 4)
+                ],
+                4,
+                152406643),
                 "void main.fastSlow!().fastSlow()": LineData(
                         "void main.fastSlow!().fastSlow()", [
                         "_Dmain"
@@ -175,8 +191,11 @@ _Dmain	0	152415759	2710
                 ], 1, 126428865),
                 "void main.slow()": LineData("void main.slow()", [
                         "void main.fastSlow!().fastSlow()"
-                ], [
+                ],
+                [
                         Tuple!(string, "name", uint, "count")("void main.sleep(long)", 1)
-                ], 1, 114157000)
+                ],
+                1,
+                114157000)
         ]);
 }
