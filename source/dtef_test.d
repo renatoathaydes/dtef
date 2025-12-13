@@ -22,8 +22,6 @@ unittest
 @name("Basic Callee Line Processing")
 unittest
 {
-        import std.typecons : tuple;
-
         LineData lineData = {name: "_DMain"};
         process("	    1	_D4main5fast2FNbNiZv", lineData);
         assertEquals(lineData.name, "_DMain");
@@ -31,15 +29,13 @@ unittest
         assertEquals(lineData.callCount, 0);
         assertEquals(lineData.calledBy, []);
         assertEquals(lineData.calls, [
-                tuple!("name", "count")("void main.fast2()", cast(uint) 1)
+                NameCount("void main.fast2()", cast(uint) 1)
         ]);
 }
 
 @name("Full Entry Processing")
 unittest
 {
-        import std.typecons : tuple;
-
         LineData lineData = {};
         auto res1 = process("	    2	_D4main__T8fastSlowZQkFNbNiZv", lineData);
         auto res2 = process("_D4main4slowFNbNiZv	2	114157000	524", lineData);
@@ -58,14 +54,13 @@ unittest
                 "void main.fastSlow!().fastSlow()"
         ]);
         assertEquals(lineData.calls, [
-                tuple!("name", "count")("void main.sleep(long)", cast(uint) 2)
+                NameCount("void main.sleep(long)", cast(uint) 2)
         ]);
 }
 
 @name("Full File Processing")
 unittest
 {
-        import std.typecons : Tuple;
         import std.algorithm.iteration : splitter;
         import std.array : array;
 
@@ -125,15 +120,15 @@ _Dmain	0	152415759	2710
                         "void main.fastSlow!().fastSlow()"
                 ],
                 [
-                        Tuple!(string, "name", uint, "count")("void main.sleep(long)", 3)
+                        NameCount("void main.sleep(long)", 3)
                 ],
                 3,
-                38251798),
+                38_251_798),
                 "void main.nothing()": LineData("void main.nothing()", [
                         "_Dmain"
                 ],
                 [
-                        Tuple!(string, "name", uint, "count")("void main.doNothing()", 2)
+                        NameCount("void main.doNothing()", 2)
                 ],
                 1,
                 568),
@@ -148,10 +143,10 @@ _Dmain	0	152415759	2710
                         "_Dmain"
                 ],
                 [
-                        Tuple!(string, "name", uint, "count")("void main.fast()", 2)
+                        NameCount("void main.fast()", 2)
                 ],
                 1,
-                25983616),
+                25_983_616),
                 "void main.doNothing()": LineData("void main.doNothing()", [
                         "void main.nothing()"
                 ],
@@ -162,40 +157,40 @@ _Dmain	0	152415759	2710
                         "core.time.Duration core.time.dur!(\"msecs\").dur(long)", [
                         "void main.sleep(long)"
                 ], [
-                        Tuple!(string, "name", uint, "count")(
+                        NameCount(
                                 "long core.time.convert!(\"msecs\", \"hnsecs\").convert(long)", 4)
                 ], 4, 2891),
                 "_Dmain": LineData("_Dmain", [], [
-                        Tuple!(string, "name", uint, "count")("void main.fast2()", 1),
-                        Tuple!(string, "name", uint, "count")("void main.fastSlow!().fastSlow()", 1),
-                        Tuple!(string, "name", uint, "count")("void main.nothing()", 1)
+                        NameCount("void main.fast2()", 1),
+                        NameCount("void main.fastSlow!().fastSlow()", 1),
+                        NameCount("void main.nothing()", 1)
                 ],
                 0,
-                152415759),
+                152_415_759),
                 "void main.sleep(long)": LineData("void main.sleep(long)", [
                         "void main.fast()",
                         "void main.slow()"
                 ],
                 [
-                        Tuple!(string, "name", uint, "count")(
+                        NameCount(
                                 "core.time.Duration core.time.dur!(\"msecs\").dur(long)", 4)
                 ],
                 4,
-                152406643),
+                152_406_643),
                 "void main.fastSlow!().fastSlow()": LineData(
                         "void main.fastSlow!().fastSlow()", [
                         "_Dmain"
                 ], [
-                        Tuple!(string, "name", uint, "count")("void main.fast()", 1),
-                        Tuple!(string, "name", uint, "count")("void main.slow()", 1)
-                ], 1, 126428865),
+                        NameCount("void main.fast()", 1),
+                        NameCount("void main.slow()", 1)
+                ], 1, 126_428_865),
                 "void main.slow()": LineData("void main.slow()", [
                         "void main.fastSlow!().fastSlow()"
                 ],
                 [
-                        Tuple!(string, "name", uint, "count")("void main.sleep(long)", 1)
+                        NameCount("void main.sleep(long)", 1)
                 ],
                 1,
-                114157000)
+                114_157_000)
         ]);
 }

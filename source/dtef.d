@@ -1,12 +1,15 @@
-import std.typecons : Tuple;
 import std.stdio : File;
-
-alias NameCount = Tuple!(string, "name", uint, "count");
 
 enum OutputMode
 {
         json,
         text,
+}
+
+struct NameCount
+{
+        string name;
+        uint count;
 }
 
 struct LineData
@@ -97,17 +100,17 @@ void print(const ref LineData[string] data, OutputMode mode = OutputMode.json)
         json.object["pid"] = 0;
         json.object["tid"] = 0;
 
-        void printJSON(const ref LineData lineData, long ts)
+        void printJSON(const ref LineData lineData)
         {
                 stdout.writeln(first ? "" : ",");
                 first = false;
-                json.object["ts"] = ts;
+                json.object["ts"] = lineData.time;
                 json.object["name"] = lineData.name;
                 json.object["dur"] = lineData.timePerCall();
                 stdout.write(json);
         }
 
-        void printText(const ref LineData lineData, long ts)
+        void printText(const ref LineData lineData)
         {
                 stdout.writefln("%dx %s (%d us)", lineData.callCount, lineData.name, lineData.time);
                 if (!lineData.calledBy.empty)
@@ -123,7 +126,7 @@ void print(const ref LineData[string] data, OutputMode mode = OutputMode.json)
                         stdout.writeln("    Calls:");
                         foreach (callee; lineData.calls)
                         {
-                                stdout.writeln("        ", callee);
+                                stdout.writefln("        %dx %s", callee.count, callee.name);
                         }
                 }
         }
@@ -135,7 +138,7 @@ void print(const ref LineData[string] data, OutputMode mode = OutputMode.json)
 
         foreach (key, ref lineData; data)
         {
-                printer(lineData, lineData.timePerCall());
+                printer(lineData);
         }
 
         if (mode == OutputMode.json)
@@ -250,7 +253,7 @@ void addLine(ref LineData lineData, in char[] line)
                         {
                                 auto name = computeName(items[1]);
                                 auto count = items[0].toNumeric!uint(line);
-                                lineData.calls ~= tuple!("name", "count")(name, count);
+                                lineData.calls ~= NameCount(name, count);
                         }
                         else
                         {
