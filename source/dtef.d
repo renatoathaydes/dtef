@@ -123,7 +123,7 @@ void print(const ref FunCallInfo[string] data, OutputMode mode = OutputMode.json
 
         void printText(const ref FunCallInfo info)
         {
-                auto pctg = 100 * info.ownTime / info.execTime;
+                auto pctg = info.execTime == 0 ? 100.0 : 100 * info.ownTime / info.execTime;
                 stdout.writefln("%dx %s (%d us, %.2f%%)",
                         info.callCount, info.name, info.execTime, pctg);
                 if (!info.calledBy.empty)
@@ -142,7 +142,7 @@ void print(const ref FunCallInfo[string] data, OutputMode mode = OutputMode.json
                                 if (auto calleeInfo = callee.name in data)
                                 {
                                         auto calleeTime = callee.count * calleeInfo.timePerCall();
-                                        pctg = 100 * calleeTime / info.execTime;
+                                        pctg = info.execTime == 0 ? 100.0 : 100 * calleeTime / info.execTime;
                                         stdout.writefln("        %dx %s (%d us, %.2f%%)",
                                                 callee.count, callee.name, calleeTime, pctg);
                                 }
