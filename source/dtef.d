@@ -58,6 +58,7 @@ enum ProcessResult
         stop,
         goOn,
         addInfo,
+        skipEntry,
 }
 
 /// Parse a D trace log file.
@@ -70,7 +71,9 @@ FunCallInfo[string] parseFile(File file)
 FunCallInfo[string] parseLines(R)(R lines)
 {
         import std.range : empty;
+        import std.string : startsWith;
 
+        bool skippingEntry = false;
         string[] cb;
         NameCount[] ca;
         FunCallInfo[string] data;
@@ -79,9 +82,20 @@ FunCallInfo[string] parseLines(R)(R lines)
         FunCallInfo info = {calledBy: cb, calls: ca};
         loop: foreach (const(char)[] line; lines)
         {
+                if (skippingEntry)
+                {
+                        if (line.startsWith("----"))
+                        {
+                                skippingEntry = false;
+                        }
+                        continue;
+                }
                 auto res = process(line, info);
                 final switch (res) with (ProcessResult)
                 {
+                case skipEntry:
+                        skippingEntry = true;
+                        break;
                 case stop:
                         auto name = info.name;
                         if (!name.empty)
@@ -102,8 +116,37 @@ FunCallInfo[string] parseLines(R)(R lines)
 
 void print(const ref FunCallInfo[string] data, OutputMode mode = OutputMode.json)
 {
-        import std.range : empty, repeat, take;
-        import std.stdio : stdout, stderr;
+        final switch (mode) with (OutputMode)
+        {
+        case json:
+                printJSON(data);
+                break;
+        case text:
+                printText(data);
+                break;
+        }
+}
+
+ProcessResult process(in char[] line, ref FunCallInfo info)
+{
+        import std.range : empty;
+        import std.string : startsWith;
+
+        if (line.empty)
+                return ProcessResult.stop;
+        if (line.startsWith("----"))
+                with (ProcessResult)
+                {
+                        return info.name.empty ? goOn : addInfo;
+                }
+        return info.addLine(line);
+}
+
+private:
+
+void printJSON(const ref FunCallInfo[string] data)
+{
+        import std.stdio : stdout;
         import std.json : JSONValue;
 
         bool first = true;
@@ -111,7 +154,7 @@ void print(const ref FunCallInfo[string] data, OutputMode mode = OutputMode.json
         json.object["pid"] = 0;
         json.object["tid"] = 0;
 
-        void printJSON(const ref FunCallInfo info)
+        void print(const ref FunCallInfo info)
         {
                 stdout.writeln(first ? "" : ",");
                 first = false;
@@ -121,7 +164,22 @@ void print(const ref FunCallInfo[string] data, OutputMode mode = OutputMode.json
                 stdout.write(json);
         }
 
-        void printText(const ref FunCallInfo info)
+        stdout.writeln("[");
+
+        foreach (_, ref info; data)
+        {
+                print(info);
+        }
+
+        stdout.writeln("]");
+}
+
+void printText(const ref FunCallInfo[string] data)
+{
+        import std.range : empty;
+        import std.stdio : stdout;
+
+        void print(const ref FunCallInfo info)
         {
                 auto pctg = info.execTime == 0 ? 100.0 : 100 * info.ownTime / info.execTime;
                 stdout.writefln("%dx %s (%d us, %.2f%%)",
@@ -142,7 +200,8 @@ void print(const ref FunCallInfo[string] data, OutputMode mode = OutputMode.json
                                 if (auto calleeInfo = callee.name in data)
                                 {
                                         auto calleeTime = callee.count * calleeInfo.timePerCall();
-                                        pctg = info.execTime == 0 ? 100.0 : 100 * calleeTime / info.execTime;
+                                        pctg = info.execTime == 0 ? 100.0 : 100 * calleeTime / info
+                                                .execTime;
                                         stdout.writefln("        %dx %s (%d us, %.2f%%)",
                                                 callee.count, callee.name, calleeTime, pctg);
                                 }
@@ -150,37 +209,18 @@ void print(const ref FunCallInfo[string] data, OutputMode mode = OutputMode.json
                 }
         }
 
-        auto printer = mode == OutputMode.json ? &printJSON : &printText;
-
-        if (mode == OutputMode.json)
-                stdout.writeln("[");
+        // try to print _Dmain first, always
+        if (auto info = "_Dmain" in data)
+        {
+                print(*info);
+        }
 
         foreach (key, ref info; data)
         {
-                printer(info);
+                if (key != "_Dmain")
+                        print(info);
         }
-
-        if (mode == OutputMode.json)
-                stdout.writeln("]");
 }
-
-ProcessResult process(in char[] line, ref FunCallInfo info)
-{
-        import std.range : empty;
-        import std.algorithm.searching : startsWith;
-
-        if (line.empty)
-                return ProcessResult.stop;
-        if (line.startsWith("-----"))
-                with (ProcessResult)
-                {
-                        return info.name.empty ? goOn : addInfo;
-                }
-        info.addLine(line);
-        return ProcessResult.goOn;
-}
-
-private:
 
 string computeName(string name)
 {
@@ -245,7 +285,7 @@ string[] parts(inout string line, out string[4] parts) pure @nogc
         return parts[0 .. parts_count];
 }
 
-void addLine(ref FunCallInfo info, in char[] line)
+ProcessResult addLine(ref FunCallInfo info, in char[] line)
 {
         import std.algorithm.searching : startsWith;
         import std.range : back, empty;
@@ -261,8 +301,16 @@ void addLine(ref FunCallInfo info, in char[] line)
                 // dline is a caller line if the name is still empty, or a callee line otherwise.
                 if (info.name.empty)
                 {
-                        auto item = dline.parts(parts).back;
-                        info.calledBy ~= computeName(item);
+                        auto items = dline[1 .. $].parts(parts);
+                        if (items.length == 2 && !items.back.empty)
+                        {
+                                info.calledBy ~= computeName(items.back);
+                        }
+                        else
+                        {
+                                // DMD procudes lots of corrupt entries, if we detect one, skip it.
+                                return ProcessResult.skipEntry;
+                        }
                 }
                 else
                 {
@@ -286,8 +334,7 @@ void addLine(ref FunCallInfo info, in char[] line)
                 if (items.length == 4)
                 {
                         info.name = computeName(items[0]);
-                        info.callCount = items[1].toNumeric!long(
-                                line);
+                        info.callCount = items[1].toNumeric!long(line);
                         info.execTime = items[2].toNumeric!long(line);
                         info.ownTime = items[3].toNumeric!long(line);
                 }
@@ -296,6 +343,7 @@ void addLine(ref FunCallInfo info, in char[] line)
                         stderr.writeln("WARNING: Invalid function name line (not <name>\\t<count>\\t<total-time>\\t<own-time>): '", dline, "'");
                 }
         }
+        return ProcessResult.goOn;
 }
 
 string decodeLatin(in char[] line)
