@@ -12,28 +12,33 @@ struct NameCount
         uint count;
 }
 
-struct LineData
+struct FunCallInfo
 {
+        /// signature of the function.
         string name;
+        /// who calls this function.
         string[] calledBy;
+        /// which functions are called by this function.
         NameCount[] calls;
+        /// how many times this function was called.
         long callCount;
+        /// total time of execution of this function.
         long time;
 
-        this(ref return scope LineData lineData)
+        this(ref return scope FunCallInfo info)
         {
-                name = lineData.name;
-                calledBy = lineData.calledBy.dup;
-                calls = lineData.calls.dup;
-                callCount = lineData.callCount;
-                time = lineData.time;
+                name = info.name;
+                calledBy = info.calledBy.dup;
+                calls = info.calls.dup;
+                callCount = info.callCount;
+                time = info.time;
         }
 
         long timePerCall() const pure => callCount == 0 || time == 0 ? 0 : time / callCount;
 
-        LineData copyAndReset()
+        FunCallInfo copyAndReset()
         {
-                auto result = LineData(this);
+                auto result = FunCallInfo(this);
                 name = "";
                 calledBy.length = 0;
                 calls.length = 0;
@@ -46,41 +51,41 @@ enum ProcessResult
 {
         stop,
         goOn,
-        addLineData,
+        addInfo,
 }
 
 /// Parse a D trace log file.
-LineData[string] parseFile(File file)
+FunCallInfo[string] parseFile(File file)
 {
         return parseLines(file.byLine);
 }
 
 /// Parse a Range that gives each line as a `const(char)[]`.
-LineData[string] parseLines(R)(R lines)
+FunCallInfo[string] parseLines(R)(R lines)
 {
         import std.range : empty;
 
         string[] cb;
         NameCount[] ca;
-        LineData[string] data;
+        FunCallInfo[string] data;
         cb.reserve(32);
         ca.reserve(32);
-        LineData lineData = {calledBy: cb, calls: ca};
+        FunCallInfo info = {calledBy: cb, calls: ca};
         loop: foreach (const(char)[] line; lines)
         {
-                auto res = process(line, lineData);
+                auto res = process(line, info);
                 final switch (res) with (ProcessResult)
                 {
                 case stop:
-                        auto name = lineData.name;
+                        auto name = info.name;
                         if (!name.empty)
                         {
-                                data[name] = lineData.copyAndReset;
+                                data[name] = info.copyAndReset;
                         }
                         break loop;
-                case addLineData:
-                        auto name = lineData.name;
-                        data[name] = lineData.copyAndReset;
+                case addInfo:
+                        auto name = info.name;
+                        data[name] = info.copyAndReset;
                         break;
                 case goOn:
                         continue;
@@ -89,7 +94,7 @@ LineData[string] parseLines(R)(R lines)
         return data;
 }
 
-void print(const ref LineData[string] data, OutputMode mode = OutputMode.json)
+void print(const ref FunCallInfo[string] data, OutputMode mode = OutputMode.json)
 {
         import std.range : empty, repeat, take;
         import std.stdio : stdout, stderr;
@@ -100,31 +105,31 @@ void print(const ref LineData[string] data, OutputMode mode = OutputMode.json)
         json.object["pid"] = 0;
         json.object["tid"] = 0;
 
-        void printJSON(const ref LineData lineData)
+        void printJSON(const ref FunCallInfo info)
         {
                 stdout.writeln(first ? "" : ",");
                 first = false;
-                json.object["ts"] = lineData.time;
-                json.object["name"] = lineData.name;
-                json.object["dur"] = lineData.timePerCall();
+                json.object["ts"] = info.time;
+                json.object["name"] = info.name;
+                json.object["dur"] = info.timePerCall();
                 stdout.write(json);
         }
 
-        void printText(const ref LineData lineData)
+        void printText(const ref FunCallInfo info)
         {
-                stdout.writefln("%dx %s (%d us)", lineData.callCount, lineData.name, lineData.time);
-                if (!lineData.calledBy.empty)
+                stdout.writefln("%dx %s (%d us)", info.callCount, info.name, info.time);
+                if (!info.calledBy.empty)
                 {
                         stdout.writeln("    Called by:");
-                        foreach (caller; lineData.calledBy)
+                        foreach (caller; info.calledBy)
                         {
                                 stdout.writeln("        ", caller);
                         }
                 }
-                if (!lineData.calls.empty)
+                if (!info.calls.empty)
                 {
                         stdout.writeln("    Calls:");
-                        foreach (callee; lineData.calls)
+                        foreach (callee; info.calls)
                         {
                                 stdout.writefln("        %dx %s", callee.count, callee.name);
                         }
@@ -136,16 +141,16 @@ void print(const ref LineData[string] data, OutputMode mode = OutputMode.json)
         if (mode == OutputMode.json)
                 stdout.writeln("[");
 
-        foreach (key, ref lineData; data)
+        foreach (key, ref info; data)
         {
-                printer(lineData);
+                printer(info);
         }
 
         if (mode == OutputMode.json)
                 stdout.writeln("]");
 }
 
-ProcessResult process(in char[] line, ref LineData lineData)
+ProcessResult process(in char[] line, ref FunCallInfo info)
 {
         import std.range : empty;
         import std.algorithm.searching : startsWith;
@@ -155,9 +160,9 @@ ProcessResult process(in char[] line, ref LineData lineData)
         if (line.startsWith("-----"))
                 with (ProcessResult)
                 {
-                        return lineData.name.empty ? goOn : addLineData;
+                        return info.name.empty ? goOn : addInfo;
                 }
-        lineData.addLine(line);
+        info.addLine(line);
         return ProcessResult.goOn;
 }
 
@@ -226,11 +231,10 @@ string[] parts(inout string line, out string[4] parts) pure @nogc
         return parts[0 .. parts_count];
 }
 
-void addLine(ref LineData lineData, in char[] line)
+void addLine(ref FunCallInfo info, in char[] line)
 {
         import std.algorithm.searching : startsWith;
         import std.range : back, empty;
-        import std.typecons : tuple;
         import std.stdio : stderr;
 
         // array that will hold a split line
@@ -241,10 +245,10 @@ void addLine(ref LineData lineData, in char[] line)
         if (dline.startsWith("\t"))
         {
                 // dline is a caller line if the name is still empty, or a callee line otherwise.
-                if (lineData.name.empty)
+                if (info.name.empty)
                 {
                         auto item = dline.parts(parts).back;
-                        lineData.calledBy ~= computeName(item);
+                        info.calledBy ~= computeName(item);
                 }
                 else
                 {
@@ -253,7 +257,7 @@ void addLine(ref LineData lineData, in char[] line)
                         {
                                 auto name = computeName(items[1]);
                                 auto count = items[0].toNumeric!uint(line);
-                                lineData.calls ~= NameCount(name, count);
+                                info.calls ~= NameCount(name, count);
                         }
                         else
                         {
@@ -267,10 +271,10 @@ void addLine(ref LineData lineData, in char[] line)
                 auto items = dline.parts(parts);
                 if (items.length == 4)
                 {
-                        lineData.name = computeName(items[0]);
-                        lineData.callCount = items[1].toNumeric!long(
+                        info.name = computeName(items[0]);
+                        info.callCount = items[1].toNumeric!long(
                                 line);
-                        lineData.time = items[2].toNumeric!long(line);
+                        info.time = items[2].toNumeric!long(line);
                 }
                 else
                 {
