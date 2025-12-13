@@ -12,23 +12,23 @@ void assertEquals(T)(T actual, T expected)
 @name("Basic Main Line Processing")
 unittest
 {
-        LineData lineData = {};
-        process("_D4main5sleepFNbNilZv	4	152406643	152403752", lineData);
-        assertEquals(lineData.name, "void main.sleep(long)");
-        assertEquals(lineData.time, 152_406_643L);
-        assertEquals(lineData.callCount, 4);
+        FunCallInfo funCallInfo = {};
+        process("_D4main5sleepFNbNilZv	4	152406643	152403752", funCallInfo);
+        assertEquals(funCallInfo.name, "void main.sleep(long)");
+        assertEquals(funCallInfo.execTime, 152_406_643L);
+        assertEquals(funCallInfo.callCount, 4);
 }
 
 @name("Basic Callee Line Processing")
 unittest
 {
-        LineData lineData = {name: "_DMain"};
-        process("	    1	_D4main5fast2FNbNiZv", lineData);
-        assertEquals(lineData.name, "_DMain");
-        assertEquals(lineData.time, 0L);
-        assertEquals(lineData.callCount, 0);
-        assertEquals(lineData.calledBy, []);
-        assertEquals(lineData.calls, [
+        FunCallInfo funCallInfo = {name: "_DMain"};
+        process("	    1	_D4main5fast2FNbNiZv", funCallInfo);
+        assertEquals(funCallInfo.name, "_DMain");
+        assertEquals(funCallInfo.execTime, 0L);
+        assertEquals(funCallInfo.callCount, 0);
+        assertEquals(funCallInfo.calledBy, []);
+        assertEquals(funCallInfo.calls, [
                 NameCount("void main.fast2()", cast(uint) 1)
         ]);
 }
@@ -36,24 +36,24 @@ unittest
 @name("Full Entry Processing")
 unittest
 {
-        LineData lineData = {};
-        auto res1 = process("	    2	_D4main__T8fastSlowZQkFNbNiZv", lineData);
-        auto res2 = process("_D4main4slowFNbNiZv	2	114157000	524", lineData);
-        auto res3 = process("	    2	_D4main5sleepFNbNilZv", lineData);
-        auto res4 = process("------------------", lineData);
+        FunCallInfo funCallInfo = {};
+        auto res1 = process("	    2	_D4main__T8fastSlowZQkFNbNiZv", funCallInfo);
+        auto res2 = process("_D4main4slowFNbNiZv	2	114157000	524", funCallInfo);
+        auto res3 = process("	    2	_D4main5sleepFNbNilZv", funCallInfo);
+        auto res4 = process("------------------", funCallInfo);
         with (ProcessResult)
         {
-                assertEquals([goOn, goOn, goOn, addLineData], [
+                assertEquals([goOn, goOn, goOn, addInfo], [
                         res1, res2, res3, res4
                 ]);
         }
-        assertEquals(lineData.name, "void main.slow()");
-        assertEquals(lineData.time, 114_157_000L);
-        assertEquals(lineData.callCount, 2);
-        assertEquals(lineData.calledBy, [
+        assertEquals(funCallInfo.name, "void main.slow()");
+        assertEquals(funCallInfo.execTime, 114_157_000L);
+        assertEquals(funCallInfo.callCount, 2);
+        assertEquals(funCallInfo.calledBy, [
                 "void main.fastSlow!().fastSlow()"
         ]);
-        assertEquals(lineData.calls, [
+        assertEquals(funCallInfo.calls, [
                 NameCount("void main.sleep(long)", cast(uint) 2)
         ]);
 }
@@ -115,7 +115,7 @@ _Dmain	0	152415759	2710
         auto result = parseLines(input);
 
         assertEquals(result, [
-                "void main.fast()": LineData("void main.fast()", [
+                "void main.fast()": FunCallInfo("void main.fast()", [
                         "void main.fast2()",
                         "void main.fastSlow!().fastSlow()"
                 ],
@@ -124,7 +124,7 @@ _Dmain	0	152415759	2710
                 ],
                 3,
                 38_251_798),
-                "void main.nothing()": LineData("void main.nothing()", [
+                "void main.nothing()": FunCallInfo("void main.nothing()", [
                         "_Dmain"
                 ],
                 [
@@ -132,14 +132,14 @@ _Dmain	0	152415759	2710
                 ],
                 1,
                 568),
-                "long core.time.convert!(\"msecs\", \"hnsecs\").convert(long)": LineData(
+                "long core.time.convert!(\"msecs\", \"hnsecs\").convert(long)": FunCallInfo(
                         "long core.time.convert!(\"msecs\", \"hnsecs\").convert(long)", [
                         "core.time.Duration core.time.dur!(\"msecs\").dur(long)"
                 ], [], 4, 347),
-                "bool core.internal.array.equality.__equals!(char, char).__equals(scope const(char[]), scope const(char[]))": LineData(
+                "bool core.internal.array.equality.__equals!(char, char).__equals(scope const(char[]), scope const(char[]))": FunCallInfo(
                         "bool core.internal.array.equality.__equals!(char, char).__equals(scope const(char[]), scope const(char[]))", [
                 ], [], 0, 315),
-                "void main.fast2()": LineData("void main.fast2()", [
+                "void main.fast2()": FunCallInfo("void main.fast2()", [
                         "_Dmain"
                 ],
                 [
@@ -147,27 +147,27 @@ _Dmain	0	152415759	2710
                 ],
                 1,
                 25_983_616),
-                "void main.doNothing()": LineData("void main.doNothing()", [
+                "void main.doNothing()": FunCallInfo("void main.doNothing()", [
                         "void main.nothing()"
                 ],
                 [],
                 2,
                 132),
-                "core.time.Duration core.time.dur!(\"msecs\").dur(long)": LineData(
+                "core.time.Duration core.time.dur!(\"msecs\").dur(long)": FunCallInfo(
                         "core.time.Duration core.time.dur!(\"msecs\").dur(long)", [
                         "void main.sleep(long)"
                 ], [
                         NameCount(
                                 "long core.time.convert!(\"msecs\", \"hnsecs\").convert(long)", 4)
                 ], 4, 2891),
-                "_Dmain": LineData("_Dmain", [], [
+                "_Dmain": FunCallInfo("_Dmain", [], [
                         NameCount("void main.fast2()", 1),
                         NameCount("void main.fastSlow!().fastSlow()", 1),
                         NameCount("void main.nothing()", 1)
                 ],
                 0,
                 152_415_759),
-                "void main.sleep(long)": LineData("void main.sleep(long)", [
+                "void main.sleep(long)": FunCallInfo("void main.sleep(long)", [
                         "void main.fast()",
                         "void main.slow()"
                 ],
@@ -177,14 +177,14 @@ _Dmain	0	152415759	2710
                 ],
                 4,
                 152_406_643),
-                "void main.fastSlow!().fastSlow()": LineData(
+                "void main.fastSlow!().fastSlow()": FunCallInfo(
                         "void main.fastSlow!().fastSlow()", [
                         "_Dmain"
                 ], [
                         NameCount("void main.fast()", 1),
                         NameCount("void main.slow()", 1)
                 ], 1, 126_428_865),
-                "void main.slow()": LineData("void main.slow()", [
+                "void main.slow()": FunCallInfo("void main.slow()", [
                         "void main.fastSlow!().fastSlow()"
                 ],
                 [

@@ -1,17 +1,20 @@
 import std.stdio : File;
 
+/// dtef output modes.
 enum OutputMode
 {
         json,
         text,
 }
 
+/// Callee information.
 struct NameCount
 {
         string name;
         uint count;
 }
 
+/// Information about a function call, including callees and callers.
 struct FunCallInfo
 {
         /// signature of the function.
@@ -23,7 +26,9 @@ struct FunCallInfo
         /// how many times this function was called.
         long callCount;
         /// total time of execution of this function.
-        long time;
+        long execTime;
+        /// time of execution spent within function, rather than waiting on callees.
+        long ownTime;
 
         this(ref return scope FunCallInfo info)
         {
@@ -31,10 +36,11 @@ struct FunCallInfo
                 calledBy = info.calledBy.dup;
                 calls = info.calls.dup;
                 callCount = info.callCount;
-                time = info.time;
+                execTime = info.execTime;
+                ownTime = info.ownTime;
         }
 
-        long timePerCall() const pure => callCount == 0 || time == 0 ? 0 : time / callCount;
+        long timePerCall() const pure => callCount == 0 || execTime == 0 ? 0 : execTime / callCount;
 
         FunCallInfo copyAndReset()
         {
@@ -109,7 +115,7 @@ void print(const ref FunCallInfo[string] data, OutputMode mode = OutputMode.json
         {
                 stdout.writeln(first ? "" : ",");
                 first = false;
-                json.object["ts"] = info.time;
+                json.object["ts"] = 0;
                 json.object["name"] = info.name;
                 json.object["dur"] = info.timePerCall();
                 stdout.write(json);
@@ -117,7 +123,9 @@ void print(const ref FunCallInfo[string] data, OutputMode mode = OutputMode.json
 
         void printText(const ref FunCallInfo info)
         {
-                stdout.writefln("%dx %s (%d us)", info.callCount, info.name, info.time);
+                auto pctg = 100 * info.ownTime / info.execTime;
+                stdout.writefln("%dx %s (%d us, %.2f%%)",
+                        info.callCount, info.name, info.execTime, pctg);
                 if (!info.calledBy.empty)
                 {
                         stdout.writeln("    Called by:");
@@ -131,7 +139,13 @@ void print(const ref FunCallInfo[string] data, OutputMode mode = OutputMode.json
                         stdout.writeln("    Calls:");
                         foreach (callee; info.calls)
                         {
-                                stdout.writefln("        %dx %s", callee.count, callee.name);
+                                if (auto calleeInfo = callee.name in data)
+                                {
+                                        auto calleeTime = callee.count * calleeInfo.timePerCall();
+                                        pctg = 100 * calleeTime / info.execTime;
+                                        stdout.writefln("        %dx %s (%d us, %.2f%%)",
+                                                callee.count, callee.name, calleeTime, pctg);
+                                }
                         }
                 }
         }
@@ -274,7 +288,8 @@ void addLine(ref FunCallInfo info, in char[] line)
                         info.name = computeName(items[0]);
                         info.callCount = items[1].toNumeric!long(
                                 line);
-                        info.time = items[2].toNumeric!long(line);
+                        info.execTime = items[2].toNumeric!long(line);
+                        info.ownTime = items[3].toNumeric!long(line);
                 }
                 else
                 {

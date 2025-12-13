@@ -57,7 +57,7 @@ int main(string[] args)
 
         foreach (path; files)
         {
-                LineData[string] data = void;
+                FunCallInfo[string] data = void;
                 {
                         auto file = File(path);
                         data = parseFile(file);
